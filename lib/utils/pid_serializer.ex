@@ -1,4 +1,4 @@
-defmodule Excontainers.PidSerializer do
+defmodule Utils.PidSerializer do
   @spec serialize(pid()) :: binary
   def serialize(pid) do
     pid
