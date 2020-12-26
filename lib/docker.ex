@@ -1,11 +1,17 @@
 defmodule Docker do
   use Tesla
 
-  plug Tesla.Middleware.BaseUrl, Docker.Host.detect()
+  alias Docker.HackneyHost
+
+  plug Tesla.Middleware.BaseUrl, docker_host()
   plug Tesla.Middleware.JSON
   adapter Tesla.Adapter.Hackney
 
   def xxx() do
     get("/v1.41/info")
+  end
+
+  defp docker_host do
+    HackneyHost.from_docker_host(Docker.Host.detect())
   end
 end

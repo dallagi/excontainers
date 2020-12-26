@@ -3,6 +3,7 @@ defmodule DockerTest do
 
   setup do
     Mox.stub_with(MockEnvironment, Support.StubEnvironment)
+    :ok
   end
 
   test "xxx" do
