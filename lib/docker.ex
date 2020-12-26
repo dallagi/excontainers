@@ -1,7 +1,7 @@
 defmodule Docker do
   use Tesla
 
-  alias Docker.HackneyHost
+  alias Docker.{DockerHost, HackneyHost}
 
   plug Tesla.Middleware.BaseUrl, docker_host()
   plug Tesla.Middleware.JSON
@@ -12,6 +12,6 @@ defmodule Docker do
   end
 
   defp docker_host do
-    HackneyHost.from_docker_host(Docker.Host.detect())
+    HackneyHost.from_docker_host(DockerHost.detect())
   end
 end

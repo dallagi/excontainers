@@ -1,4 +1,4 @@
-defmodule Docker.Host do
+defmodule Docker.DockerHost do
   @default_host "unix:///var/run/docker.sock"
 
   def detect do
