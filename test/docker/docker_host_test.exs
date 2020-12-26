@@ -14,9 +14,13 @@ defmodule Docker.DockerHostTest do
   end
 
   test "detect/0 returns content of $DOCKER_HOST environment variable" do
-    MockEnvironment
-    |> expect(:get, fn ("DOCKER_HOST", _default) -> "tcp://1.2.3.4:1234" end)
+    mock_docker_host("tcp://1.2.3.4:1234")
 
     assert DockerHost.detect() == "tcp://1.2.3.4:1234"
+  end
+
+  defp mock_docker_host(mocked_value) do
+    MockEnvironment
+    |> expect(:get, fn ("DOCKER_HOST", _default) -> mocked_value end)
   end
 end

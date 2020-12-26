@@ -7,8 +7,11 @@ defmodule Docker do
   plug Tesla.Middleware.JSON
   adapter Tesla.Adapter.Hackney
 
-  def xxx() do
-    get("/v1.41/info")
+  def ping() do
+    case get("/v1.41/info") do
+      {:ok, _response} -> :ok
+      {:error, message} -> {:error, message}
+    end
   end
 
   defp docker_host do
