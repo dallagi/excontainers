@@ -1,6 +1,6 @@
 # Excontainers
 
-**TODO: Add description**
+Something like [Testcontainers](https://www.testcontainers.org/), for elixir.
 
 ## Installation
 
@@ -19,3 +19,14 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/excontainers](https://hexdocs.pm/excontainers).
 
+## Development
+
+### Testing
+
+Tests require a machine with a docker daemon listening on the default unix socket `/var/run/docker.sock`.
+
+Run tests with
+
+```
+mix test
+```
