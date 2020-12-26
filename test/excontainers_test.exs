@@ -1,5 +1,5 @@
 defmodule ExcontainersTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest Excontainers
 
   test "greets the world" do
