@@ -29,6 +29,7 @@ defmodule Excontainers.MixProject do
       {:tesla, "~> 1.4.0"},
       {:hackney, "~> 1.16.0"},
       {:jason, ">= 1.0.0"},
+      { :elixir_uuid, "~> 1.2" },
 
       {:mox, "~> 1.0", only: :test},
     ]

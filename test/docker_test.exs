@@ -27,18 +27,30 @@ defmodule DockerTest do
     end)
   end
 
+  test "create_container/1 runs a container and returns its id" do
+    unique_container_name = "test_create_container_#{UUID.uuid4()}"
+    container = %Docker.Container{name: unique_container_name, image: "alpine:20201218", cmd: "sleep infinity"}
+    on_exit(fn -> remove_container(unique_container_name) end)
+
+    {:ok, container_id} = Docker.create_container(container)
+
+    {docker_ps_output, _exit_code=0} = System.cmd("docker", ["ps", "-a"])
+    assert docker_ps_output =~ unique_container_name
+    assert docker_ps_output =~ String.slice(container_id, 1..11)
+  end
+
   defp mock_docker_host(mocked_value) do
     MockEnvironment
     |> expect(:get, fn ("DOCKER_HOST", _default) -> mocked_value end)
   end
 
   defp with_container(block) do
-    {stdout, _exit_code=0} = System.cmd("docker", ["run", "-d", "--rm", "alpine", "sleep", "infinity"])
+    {stdout, _exit_code=0} = System.cmd("docker", ["run", "-d", "--rm", "alpine:20201218", "sleep", "infinity"])
     container_id = String.trim(stdout)
-    on_exit(fn -> kill_container(container_id) end)
+    on_exit(fn -> remove_container(container_id) end)
 
     block.(container_id)
   end
 
-  defp kill_container(id), do: System.cmd("docker", ["kill", id])
+  defp remove_container(id_or_name), do: System.cmd("docker", ["rm", "-f", id_or_name])
 end

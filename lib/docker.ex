@@ -22,9 +22,27 @@ defmodule Docker do
     end
   end
 
+  def create_container(container) do
+    data = %{Image: container.image, Cmd: container.cmd}
+           |> remove_nil_values
+    query = %{name: container.name}
+            |> remove_nil_values
+
+    case post(base_url() <> "/containers/create", data, query: query) do
+      {:ok, response} -> {:ok, response.body["Id"]}
+      {:error, message} -> {:error, message}
+    end
+  end
+
   defp docker_host do
     HackneyHost.from_docker_host(DockerHost.detect())
   end
 
   defp base_url, do: "/" <> @api_version
+
+  def remove_nil_values(map) do
+    map
+    |> Enum.filter(fn {_, v} -> v != nil end)
+    |> Enum.into(%{})
+  end
 end
