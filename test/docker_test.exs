@@ -77,7 +77,7 @@ defmodule DockerTest do
         :ok = Docker.stop_container(container_id, timeout_seconds: 1)
 
         {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-        assert not (running_containers_output =~ String.slice(container_id, 1..11))
+        refute running_containers_output =~ String.slice(container_id, 1..11)
       end)
     end
 
@@ -86,7 +86,7 @@ defmodule DockerTest do
         :ok = Docker.stop_container(container_id)
 
         {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-        assert not (running_containers_output =~ String.slice(container_id, 1..11))
+        refute running_containers_output =~ String.slice(container_id, 1..11)
       end)
     end
 
