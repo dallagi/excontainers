@@ -33,14 +33,20 @@ defmodule DockerTest do
 
   test "create_container/2 creates a container with the specified config" do
     unique_container_name = "test_create_container_#{UUID.uuid4()}"
-    container = %Docker.ContainerConfig{image: "alpine:20201218", cmd: "sleep infinity"}
+    config = %Docker.ContainerConfig{image: "alpine:20201218", cmd: "sleep infinity"}
     on_exit(fn -> remove_container(unique_container_name) end)
 
-    {:ok, container_id} = Docker.create_container(container, unique_container_name)
+    {:ok, container_id} = Docker.create_container(config, unique_container_name)
 
     {all_containers_output, _exit_code=0} = System.cmd("docker", ["ps", "-a"])
     assert all_containers_output =~ unique_container_name
     assert all_containers_output =~ String.slice(container_id, 1..11)
+  end
+
+  test "create_container/2 returns error when container configuration is invalid" do
+    config = %Docker.ContainerConfig{image: "invalid image"}
+
+    assert {:error, _} = Docker.create_container(config)
   end
 
   test "start_container/1 starts a created container" do

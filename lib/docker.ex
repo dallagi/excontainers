@@ -32,7 +32,10 @@ defmodule Docker do
             |> remove_nil_values
 
     case post(base_url() <> "/containers/create", data, query: query) do
-      {:ok, response} -> {:ok, response.body["Id"]}
+      {:ok, response} -> case response.status do
+        201 -> {:ok, response.body["Id"]}
+        status -> {:error, "Request failed with status code #{status}"}
+      end
       {:error, message} -> {:error, message}
     end
   end
