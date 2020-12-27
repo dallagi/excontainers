@@ -11,7 +11,7 @@ defmodule DockerTest do
     assert Docker.ping() == :ok
   end
 
-  test "ping/0 returns {:error, message} when communication with docker fails" do
+  test "ping/0 returns error when communication with docker fails" do
     mock_docker_host("tcp://invalid-docker-host:1234")
 
     assert {:error, _} = Docker.ping()

@@ -10,20 +10,16 @@ defmodule Docker do
 
   def ping() do
     case get(base_url() <> "/info") do
-      {:ok, response} -> case response.status do
-        200 -> :ok
-        status -> {:error, "Request failed with status code #{status}"}
-      end
+      {:ok, %{status: 200}} -> :ok
+      {:ok, %{status: status}} -> {:error, "Request failed with status code #{status}"}
       {:error, message} -> {:error, message}
     end
   end
 
   def inspect_container(container_id) do
     case get(base_url() <> "/containers/#{container_id}/json") do
-      {:ok, response} -> case response.status do
-        200 -> {:ok, Container.parse_docker_response(response.body)}
-        status -> {:error, "Request failed with status code #{status}"}
-      end
+      {:ok, %{status: 200, body: body}} -> {:ok, Container.parse_docker_response(body)}
+      {:ok, %{status: status}} -> {:error, "Request failed with status code #{status}"}
       {:error, message} -> {:error, message}
     end
   end
@@ -35,20 +31,16 @@ defmodule Docker do
             |> remove_nil_values
 
     case post(base_url() <> "/containers/create", data, query: query) do
-      {:ok, response} -> case response.status do
-        201 -> {:ok, response.body["Id"]}
-        status -> {:error, "Request failed with status code #{status}"}
-      end
+      {:ok, %{status: 201, body: body}} ->  {:ok, body["Id"]}
+      {:ok, %{status: status}} -> {:error, "Request failed with status code #{status}"}
       {:error, message} -> {:error, message}
     end
   end
 
   def start_container(container_id) do
     case post(base_url() <> "/containers/#{container_id}/start", %{}) do
-      {:ok, response} -> case response.status do
-        204 -> :ok
-        status -> {:error, "Request failed with status code #{status}"}
-      end
+      {:ok, %{status: 204}} -> :ok
+      {:ok, %{status: status}} -> {:error, "Request failed with status code #{status}"}
       {:error, message} -> {:error, message}
     end
   end
