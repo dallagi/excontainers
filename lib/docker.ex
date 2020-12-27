@@ -2,7 +2,7 @@ defmodule Docker do
   @api_version "v1.41"
   use Tesla
 
-  alias Docker.{ContainerInfo, DockerHost, HackneyHost}
+  alias Docker.{Container, DockerHost, HackneyHost}
 
   plug Tesla.Middleware.BaseUrl, docker_host()
   plug Tesla.Middleware.JSON
@@ -17,15 +17,15 @@ defmodule Docker do
 
   def inspect_container(container_id) do
     case get(base_url() <> "/containers/#{container_id}/json") do
-      {:ok, response} -> {:ok, ContainerInfo.parse_docker_response(response.body)}
+      {:ok, response} -> {:ok, Container.parse_docker_response(response.body)}
       {:error, message} -> {:error, message}
     end
   end
 
-  def create_container(container) do
-    data = %{Image: container.image, Cmd: container.cmd}
+  def create_container(container_config, name \\ nil) do
+    data = %{Image: container_config.image, Cmd: container_config.cmd}
            |> remove_nil_values
-    query = %{name: container.name}
+    query = %{name: name}
             |> remove_nil_values
 
     case post(base_url() <> "/containers/create", data, query: query) do

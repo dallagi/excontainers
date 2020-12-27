@@ -19,20 +19,20 @@ defmodule DockerTest do
 
   test "inspect_container/1 returns info about running container" do
     with_container(fn container_id ->
-      expected_container_info = %Docker.ContainerInfo{
-        id: container_id, status: %Docker.ContainerInfo.Status{state: :running, running: true}
+      expected_container_info = %Docker.Container{
+        id: container_id, status: %Docker.Container.Status{state: :running, running: true}
       }
 
       assert {:ok, ^expected_container_info} = Docker.inspect_container(container_id)
     end)
   end
 
-  test "create_container/1 runs a container and returns its id" do
+  test "create_container/2 creates a container with the specified config" do
     unique_container_name = "test_create_container_#{UUID.uuid4()}"
-    container = %Docker.Container{name: unique_container_name, image: "alpine:20201218", cmd: "sleep infinity"}
+    container = %Docker.ContainerConfig{image: "alpine:20201218", cmd: "sleep infinity"}
     on_exit(fn -> remove_container(unique_container_name) end)
 
-    {:ok, container_id} = Docker.create_container(container)
+    {:ok, container_id} = Docker.create_container(container, unique_container_name)
 
     {docker_ps_output, _exit_code=0} = System.cmd("docker", ["ps", "-a"])
     assert docker_ps_output =~ unique_container_name
