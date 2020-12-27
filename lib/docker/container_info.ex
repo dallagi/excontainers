@@ -1,5 +1,7 @@
-defmodule Docker.Container do
+defmodule Docker.ContainerInfo do
   defstruct [:id, :status]
+
+  alias __MODULE__
 
   defmodule Status do
     @allowed_states ~w(created running paused restarting removing exited dead)
@@ -16,4 +18,14 @@ defmodule Docker.Container do
   end
 
   def running?(container), do: container.status.running
+
+  def parse_docker_response(json_info) do
+    %ContainerInfo{
+      id: json_info["Id"],
+      status: %ContainerInfo.Status{
+        state: ContainerInfo.Status.parse_status(json_info["State"]["Status"]),
+        running: json_info["State"]["Running"]
+      }
+    }
+  end
 end
