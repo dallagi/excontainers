@@ -34,7 +34,7 @@ defmodule DockerTest do
 
   test "create_container/2 creates a container with the specified config" do
     unique_container_name = "test_create_container_#{UUID.uuid4()}"
-    config = %Docker.ContainerConfig{image: "alpine:20201218", cmd: "sleep infinity"}
+    config = %Docker.ContainerConfig{image: "alpine:20201218", cmd: ["sleep", "infinity"]}
     on_exit(fn -> remove_container(unique_container_name) end)
 
     {:ok, container_id} = Docker.create_container(config, unique_container_name)

@@ -50,8 +50,15 @@ defmodule Docker do
 
   def stop_container(container_id, options \\ [timeout_seconds: 10]) do
     query = %{t: options[:timeout_seconds]} |> remove_nil_values
+    # enough to wait for container timeout
+    http_timeout = (options[:timeout_seconds] + 1) * 1000
 
-    case post(base_url() <> "/containers/#{container_id}/stop", %{}, query: query) do
+    case post(
+           base_url() <> "/containers/#{container_id}/stop",
+           %{},
+           query: query,
+           opts: [adapter: [recv_timeout: http_timeout]]
+         ) do
       {:ok, %{status: status}} when status in [204, 304] -> :ok
       {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}

@@ -6,6 +6,7 @@ defmodule Docker.Container do
   defmodule Status do
     @allowed_statuses ~w(created running paused restarting removing exited dead)
     @type state :: :created | :running | :paused | :restarting | :removing | :exited | :dead
+
     defguardp is_allowed(status) when status in @allowed_statuses
 
     defstruct [:state, :running]
