@@ -45,6 +45,16 @@ defmodule Docker do
     end
   end
 
+  def stop_container(container_id, options \\ [timeout_seconds: 10]) do
+    query = %{t: options[:timeout_seconds]} |> remove_nil_values
+
+    case post(base_url() <> "/containers/#{container_id}/stop", %{}, query: query) do
+      {:ok, %{status: status}} when status in [204, 304] -> :ok
+      {:ok, %{status: status}} -> {:error, "Request failed with status code #{status}"}
+      {:error, message} -> {:error, message}
+    end
+  end
+
   defp docker_host do
     HackneyHost.from_docker_host(DockerHost.detect())
   end

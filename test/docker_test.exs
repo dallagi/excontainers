@@ -62,6 +62,28 @@ defmodule DockerTest do
     assert {:error, _} = Docker.start_container("unexisting-container-#{UUID.uuid4()}")
   end
 
+  test "stop_container/1 stops a running container" do
+    with_running_container(fn container_id ->
+      :ok = Docker.stop_container(container_id, timeout_seconds: 1)
+
+      {running_containers_output, _exit_code=0} = System.cmd("docker", ["ps"])
+      assert not (running_containers_output =~ String.slice(container_id, 1..11))
+    end)
+  end
+
+  test "stop_container/1 returns :ok and does nothing if container was already stopped" do
+    with_created_container(fn container_id ->
+      :ok = Docker.stop_container(container_id)
+
+      {running_containers_output, _exit_code=0} = System.cmd("docker", ["ps"])
+      assert not (running_containers_output =~ String.slice(container_id, 1..11))
+    end)
+  end
+
+  test "stop_container/1 returns error when container does not exist" do
+      assert {:error, _} = Docker.stop_container("unexisting-container-#{UUID.uuid4()}")
+  end
+
   defp mock_docker_host(mocked_value) do
     MockEnvironment
     |> expect(:get, fn ("DOCKER_HOST", _default) -> mocked_value end)
@@ -83,5 +105,5 @@ defmodule DockerTest do
     block.(container_id)
   end
 
-  defp remove_container(id_or_name), do: System.cmd("docker", ["rm", "-f", id_or_name])
+  defp remove_container(id_or_name), do: System.cmd("docker", ["rm", "-f", id_or_name], stderr_to_stdout: true)
 end
