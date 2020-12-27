@@ -1,11 +1,5 @@
 defmodule DockerTest do
   use ExUnit.Case, async: true
-  import Mox
-
-  setup do
-    Mox.stub_with(MockEnvironment, Support.StubEnvironment)
-    :ok
-  end
 
   describe "ping/0" do
     test "returns :ok when communication with docker is successful" do
@@ -13,7 +7,7 @@ defmodule DockerTest do
     end
 
     test "returns error when communication with docker fails" do
-      mock_docker_host("tcp://invalid-docker-host:1234")
+      :ok = Gestalt.replace_env("DOCKER_HOST", "tcp://invalid-docker-host:1234", self())
 
       assert {:error, _} = Docker.ping()
     end
@@ -93,11 +87,6 @@ defmodule DockerTest do
     test "returns error when container does not exist" do
       assert {:error, _} = Docker.stop_container("unexisting-container-#{UUID.uuid4()}")
     end
-  end
-
-  defp mock_docker_host(mocked_value) do
-    MockEnvironment
-    |> expect(:get, fn "DOCKER_HOST", _default -> mocked_value end)
   end
 
   defp with_created_container(block) do

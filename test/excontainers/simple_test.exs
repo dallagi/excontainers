@@ -2,11 +2,6 @@ defmodule Excontainers.SimpleTest do
   use ExUnit.Case, async: true
   use Excontainers
 
-  setup do
-    Mox.stub_with(MockEnvironment, Support.StubEnvironment)
-    :ok
-  end
-
   container(:alpine, %Docker.ContainerConfig{image: "alpine:20201218", cmd: ["sleep", "infinity"]})
 
   test "container is ran during tests" do

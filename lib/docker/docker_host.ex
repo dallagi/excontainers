@@ -1,9 +1,12 @@
 defmodule Docker.DockerHost do
+  use Gestalt
+
   @default_host "unix:///var/run/docker.sock"
 
   def detect do
-    environment().get("DOCKER_HOST", @default_host)
+    case gestalt_env("DOCKER_HOST", self()) do
+      nil -> @default_host
+      val -> val
+    end
   end
-
-  defp environment, do: Application.get_env(:excontainers, :environment)
 end

@@ -1,3 +1,3 @@
 ExUnit.start()
 
-Mox.defmock(MockEnvironment, for: Environment)
+{:ok, _agent} = Gestalt.start()
