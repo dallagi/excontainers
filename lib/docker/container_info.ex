@@ -4,17 +4,14 @@ defmodule Docker.ContainerInfo do
   alias __MODULE__
 
   defmodule Status do
-    @allowed_states ~w(created running paused restarting removing exited dead)
+    @allowed_statuses ~w(created running paused restarting removing exited dead)
     @type state :: :created | :running | :paused | :restarting | :removing | :exited | :dead
+    defguardp is_allowed(status) when status in @allowed_statuses
 
     defstruct [:state, :running]
 
-    def parse_status(status_as_string) do
-      case status_as_string in @allowed_states do
-        true -> String.to_atom(status_as_string)
-        false -> nil
-      end
-    end
+    def parse_status(status_as_string) when is_allowed(status_as_string), do: String.to_atom(status_as_string)
+    def parse_status(_), do: nil
   end
 
   def running?(container), do: container.status.running
