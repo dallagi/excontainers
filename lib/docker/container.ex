@@ -14,8 +14,6 @@ defmodule Docker.Container do
     def parse_status(_), do: nil
   end
 
-  def running?(container), do: container.status.running
-
   def parse_docker_response(json_info) do
     %Container{
       id: json_info["Id"],
