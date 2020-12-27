@@ -30,3 +30,8 @@ Run tests with
 ```
 mix test
 ```
+
+## TODO
+
+* Add ExUnit integration
+* Add ryuk for resources reaping
