@@ -34,6 +34,16 @@ defmodule Docker do
     end
   end
 
+  def start_container(container_id) do
+    case post(base_url() <> "/containers/#{container_id}/start", %{}) do
+      {:ok, response} -> case response.status do
+        204 -> :ok
+        status -> {:error, "Request failed with status code #{status}"}
+      end
+      {:error, message} -> {:error, message}
+    end
+  end
+
   defp docker_host do
     HackneyHost.from_docker_host(DockerHost.detect())
   end

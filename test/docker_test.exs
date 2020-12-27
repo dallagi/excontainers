@@ -18,7 +18,7 @@ defmodule DockerTest do
   end
 
   test "inspect_container/1 returns info about running container" do
-    with_container(fn container_id ->
+    with_running_container(fn container_id ->
       expected_container_info = %Docker.Container{
         id: container_id, status: %Docker.Container.Status{state: :running, running: true}
       }
@@ -34,9 +34,22 @@ defmodule DockerTest do
 
     {:ok, container_id} = Docker.create_container(container, unique_container_name)
 
-    {docker_ps_output, _exit_code=0} = System.cmd("docker", ["ps", "-a"])
-    assert docker_ps_output =~ unique_container_name
-    assert docker_ps_output =~ String.slice(container_id, 1..11)
+    {all_containers_output, _exit_code=0} = System.cmd("docker", ["ps", "-a"])
+    assert all_containers_output =~ unique_container_name
+    assert all_containers_output =~ String.slice(container_id, 1..11)
+  end
+
+  test "start_container/1 starts a created container" do
+    with_created_container(fn container_id ->
+      :ok = Docker.start_container(container_id)
+
+      {running_containers_output, _exit_code=0} = System.cmd("docker", ["ps"])
+      assert running_containers_output =~ String.slice(container_id, 1..11)
+    end)
+  end
+
+  test "start_container/1 returns error when container does not exist" do
+    assert {:error, _} = Docker.start_container("unexisting-container-#{UUID.uuid4()}")
   end
 
   defp mock_docker_host(mocked_value) do
@@ -44,7 +57,15 @@ defmodule DockerTest do
     |> expect(:get, fn ("DOCKER_HOST", _default) -> mocked_value end)
   end
 
-  defp with_container(block) do
+  defp with_created_container(block) do
+    {stdout, _exit_code=0} = System.cmd("docker", ["create", "alpine:20201218", "sleep", "infinity"])
+    container_id = String.trim(stdout)
+    on_exit(fn -> remove_container(container_id) end)
+
+    block.(container_id)
+  end
+
+  defp with_running_container(block) do
     {stdout, _exit_code=0} = System.cmd("docker", ["run", "-d", "--rm", "alpine:20201218", "sleep", "infinity"])
     container_id = String.trim(stdout)
     on_exit(fn -> remove_container(container_id) end)
