@@ -10,7 +10,10 @@ defmodule Docker do
 
   def ping() do
     case get(base_url() <> "/info") do
-      {:ok, _response} -> :ok
+      {:ok, response} -> case response.status do
+        200 -> :ok
+        status -> {:error, "Request failed with status code #{status}"}
+      end
       {:error, message} -> {:error, message}
     end
   end
