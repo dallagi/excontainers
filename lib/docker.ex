@@ -11,7 +11,7 @@ defmodule Docker do
   def ping() do
     case get(base_url() <> "/info") do
       {:ok, %{status: 200}} -> :ok
-      {:ok, %{status: status}} -> {:error, "Request failed with status code #{status}"}
+      {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
     end
   end
@@ -19,7 +19,7 @@ defmodule Docker do
   def inspect_container(container_id) do
     case get(base_url() <> "/containers/#{container_id}/json") do
       {:ok, %{status: 200, body: body}} -> {:ok, Container.parse_docker_response(body)}
-      {:ok, %{status: status}} -> {:error, "Request failed with status code #{status}"}
+      {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
     end
   end
@@ -32,7 +32,7 @@ defmodule Docker do
 
     case post(base_url() <> "/containers/create", data, query: query) do
       {:ok, %{status: 201, body: body}} ->  {:ok, body["Id"]}
-      {:ok, %{status: status}} -> {:error, "Request failed with status code #{status}"}
+      {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
     end
   end
@@ -40,7 +40,7 @@ defmodule Docker do
   def start_container(container_id) do
     case post(base_url() <> "/containers/#{container_id}/start", %{}) do
       {:ok, %{status: 204}} -> :ok
-      {:ok, %{status: status}} -> {:error, "Request failed with status code #{status}"}
+      {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
     end
   end
@@ -50,7 +50,7 @@ defmodule Docker do
 
     case post(base_url() <> "/containers/#{container_id}/stop", %{}, query: query) do
       {:ok, %{status: status}} when status in [204, 304] -> :ok
-      {:ok, %{status: status}} -> {:error, "Request failed with status code #{status}"}
+      {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
     end
   end
