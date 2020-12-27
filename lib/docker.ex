@@ -4,9 +4,9 @@ defmodule Docker do
 
   alias Docker.{Container, DockerHost, HackneyHost}
 
-  plug Tesla.Middleware.BaseUrl, docker_host()
-  plug Tesla.Middleware.JSON
-  adapter Tesla.Adapter.Hackney
+  plug(Tesla.Middleware.BaseUrl, docker_host())
+  plug(Tesla.Middleware.JSON)
+  adapter(Tesla.Adapter.Hackney)
 
   def ping() do
     case get(base_url() <> "/info") do
@@ -25,13 +25,16 @@ defmodule Docker do
   end
 
   def create_container(container_config, name \\ nil) do
-    data = %{Image: container_config.image, Cmd: container_config.cmd}
-           |> remove_nil_values
-    query = %{name: name}
-            |> remove_nil_values
+    data =
+      %{Image: container_config.image, Cmd: container_config.cmd}
+      |> remove_nil_values
+
+    query =
+      %{name: name}
+      |> remove_nil_values
 
     case post(base_url() <> "/containers/create", data, query: query) do
-      {:ok, %{status: 201, body: body}} ->  {:ok, body["Id"]}
+      {:ok, %{status: 201, body: body}} -> {:ok, body["Id"]}
       {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
     end

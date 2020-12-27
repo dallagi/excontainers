@@ -8,7 +8,7 @@ defmodule Excontainers.MixProject do
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      elixirc_paths: elixirc_paths(Mix.env()),
+      elixirc_paths: elixirc_paths(Mix.env())
     ]
   end
 
@@ -29,10 +29,9 @@ defmodule Excontainers.MixProject do
       {:hackney, "~> 1.16.0"},
       {:jason, ">= 1.0.0"},
       {:tesla, "~> 1.4.0"},
-
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
-      {:mox, "~> 1.0", only: :test},
+      {:mox, "~> 1.0", only: :test}
     ]
   end
 

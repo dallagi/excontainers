@@ -21,6 +21,6 @@ defmodule Docker.DockerHostTest do
 
   defp mock_docker_host(mocked_value) do
     MockEnvironment
-    |> expect(:get, fn ("DOCKER_HOST", _default) -> mocked_value end)
+    |> expect(:get, fn "DOCKER_HOST", _default -> mocked_value end)
   end
 end

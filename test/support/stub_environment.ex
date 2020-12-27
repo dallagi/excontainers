@@ -4,4 +4,3 @@ defmodule Support.StubEnvironment do
   @impl Environment
   def get(_, default), do: default
 end
-
