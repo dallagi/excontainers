@@ -17,7 +17,10 @@ defmodule Docker do
 
   def inspect_container(container_id) do
     case get(base_url() <> "/containers/#{container_id}/json") do
-      {:ok, response} -> {:ok, Container.parse_docker_response(response.body)}
+      {:ok, response} -> case response.status do
+        200 -> {:ok, Container.parse_docker_response(response.body)}
+        status -> {:error, "Request failed with status code #{status}"}
+      end
       {:error, message} -> {:error, message}
     end
   end

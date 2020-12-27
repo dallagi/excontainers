@@ -27,6 +27,10 @@ defmodule DockerTest do
     end)
   end
 
+  test "inspect_container/1 returns error when container does not exist" do
+    assert {:error, _} = Docker.inspect_container("unexisting-container-#{UUID.uuid4()}")
+  end
+
   test "create_container/2 creates a container with the specified config" do
     unique_container_name = "test_create_container_#{UUID.uuid4()}"
     container = %Docker.ContainerConfig{image: "alpine:20201218", cmd: "sleep infinity"}
