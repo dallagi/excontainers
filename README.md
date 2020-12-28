@@ -23,7 +23,7 @@ be found at [https://hexdocs.pm/excontainers](https://hexdocs.pm/excontainers).
 
 ### Testing
 
-Tests require a machine with a docker daemon listening on the default unix socket `/var/run/docker.sock`.
+Tests require a machine with a docker daemon listening on the default unix socket `/var/run/docker.sock` and the cli docker client installed.
 
 Run tests with
 
@@ -33,5 +33,4 @@ mix test
 
 ## TODO
 
-* Add ExUnit integration
-* Add ryuk for resources reaping
+* Add resources reaping (e.g., using ryuk ? )
