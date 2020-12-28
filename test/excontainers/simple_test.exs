@@ -7,7 +7,7 @@ defmodule Excontainers.SimpleTest do
   container(:alpine, Container.new("alpine:20201218", cmd: ["sleep", "infinity"]))
 
   test "container is ran during tests" do
-    container_id = Excontainers.info(:alpine).id
+    container_id = Container.info(:alpine).id
 
     {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
     assert running_containers_output =~ String.slice(container_id, 1..11)
