@@ -4,7 +4,7 @@ defmodule Excontainers.ExUnit do
       import Excontainers.ExUnit
 
       setup do
-        Agent.start_link(fn -> %{} end, name: Excontainers.Agent)
+        Excontainers.Agent.start_link()
         :ok
       end
     end
@@ -14,7 +14,7 @@ defmodule Excontainers.ExUnit do
     quote do
       setup do
         {:ok, container_id} = Docker.create_container(unquote(config))
-        Agent.update(Excontainers.Agent, &Map.put(&1, unquote(name), container_id))
+        Excontainers.Agent.register_container(unquote(name), container_id)
 
         on_exit(fn -> Docker.stop_container(container_id, timeout_seconds: 2) end)
 
