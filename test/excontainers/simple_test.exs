@@ -1,6 +1,6 @@
 defmodule Excontainers.SimpleTest do
   use ExUnit.Case, async: true
-  use Excontainers
+  use Excontainers.ExUnit
 
   container(:alpine, %Docker.ContainerConfig{image: "alpine:20201218", cmd: ["sleep", "infinity"]})
 
