@@ -29,6 +29,9 @@ defmodule Docker do
       %{Image: container_config.image, Cmd: container_config.cmd}
       |> remove_nil_values
 
+    data = data
+      |> Map.merge(port_mapping_configuration(container_config.exposed_ports))
+
     query =
       %{name: name}
       |> remove_nil_values
@@ -63,6 +66,21 @@ defmodule Docker do
       {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
     end
+  end
+
+  defp port_mapping_configuration(nil), do: %{}
+  defp port_mapping_configuration(exposed_ports) do
+    exposed_ports_config = exposed_ports
+    |> Enum.map(fn port -> {port, %{}} end)
+    |> Enum.into(%{})
+    port_bindings_config = exposed_ports
+    |> Enum.map(fn port -> {port, [%{"HostPort" => ""}]} end)
+    |> Enum.into(%{})
+
+    %{
+      ExposedPorts: exposed_ports_config,
+      HostConfig: %{PortBindings: port_bindings_config}
+    }
   end
 
   defp docker_host do
