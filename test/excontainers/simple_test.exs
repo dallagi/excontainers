@@ -2,7 +2,9 @@ defmodule Excontainers.SimpleTest do
   use ExUnit.Case, async: true
   use Excontainers.ExUnit
 
-  container(:alpine, %Docker.ContainerConfig{image: "alpine:20201218", cmd: ["sleep", "infinity"]})
+  alias Excontainers.Container
+
+  container(:alpine, Container.new("alpine:20201218", cmd: ["sleep", "infinity"]))
 
   test "container is ran during tests" do
     container_id = Excontainers.info(:alpine).id
