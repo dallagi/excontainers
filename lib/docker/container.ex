@@ -33,10 +33,10 @@ defmodule Docker.Container do
   end
 
   defp host_port(nil), do: nil
+
   defp host_port(ports) do
     ports
     |> Enum.at(0)
     |> Map.get("HostPort")
   end
-
 end

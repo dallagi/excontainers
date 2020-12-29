@@ -1,5 +1,5 @@
 defmodule Excontainers.Container do
-  def new(image, opts \\ [cmd: nil, exposed_ports: :nil]) do
+  def new(image, opts \\ [cmd: nil, exposed_ports: nil]) do
     %Docker.ContainerConfig{image: image, cmd: opts[:cmd], exposed_ports: opts[:exposed_ports]}
   end
 
@@ -13,7 +13,6 @@ defmodule Excontainers.Container do
   def mapped_port(container_name, container_port) do
     container_port = set_protocol_to_tcp_if_not_specified(container_port)
     info(container_name).mapped_ports[container_port]
-
   end
 
   # TODO: this is dupicated from Docker . Refactor it

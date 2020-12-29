@@ -46,7 +46,13 @@ defmodule DockerTest do
 
     test "supports mapping ports on the container to random ports on the host" do
       unique_container_name = "test_create_container_#{UUID.uuid4()}"
-      config = %Docker.ContainerConfig{image: "alpine:20201218", cmd: ["sleep", "infinity"], exposed_ports: ["1234/tcp"]}
+
+      config = %Docker.ContainerConfig{
+        image: "alpine:20201218",
+        cmd: ["sleep", "infinity"],
+        exposed_ports: ["1234/tcp"]
+      }
+
       on_exit(fn -> remove_container(unique_container_name) end)
 
       {:ok, container_id} = Docker.create_container(config, unique_container_name)

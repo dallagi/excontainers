@@ -4,10 +4,10 @@ defmodule PortMappingTest do
   alias Excontainers.Container
 
   @http_echo_container Container.new(
-    "hashicorp/http-echo:0.2.3",
-    cmd: ["-listen=:8080", ~s(-text="hello world")],
-    exposed_ports: [8080]
-  )
+                         "hashicorp/http-echo:0.2.3",
+                         cmd: ["-listen=:8080", ~s(-text="hello world")],
+                         exposed_ports: [8080]
+                       )
 
   container(:http_echo, @http_echo_container)
 
@@ -18,5 +18,4 @@ defmodule PortMappingTest do
 
     assert response.body =~ "hello world"
   end
-
 end
