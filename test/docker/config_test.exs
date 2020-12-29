@@ -1,5 +1,5 @@
 defmodule Docker.ConfigTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   test "returns DOCKER_HOST when it is set" do
     :ok = Gestalt.replace_env("DOCKER_HOST", "tcp://my-docker-host:1234", self())
