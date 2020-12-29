@@ -1,5 +1,5 @@
 defmodule Docker.Container do
-  defstruct [:id, :status]
+  defstruct [:id, :status, :mapped_ports]
 
   alias __MODULE__
 
@@ -21,7 +21,22 @@ defmodule Docker.Container do
       status: %Container.Status{
         state: Container.Status.parse_status(json_info["State"]["Status"]),
         running: json_info["State"]["Running"]
-      }
+      },
+      mapped_ports: port_mapping(json_info["NetworkSettings"]["Ports"])
     }
   end
+
+  defp port_mapping(json_ports) do
+    json_ports
+    |> Enum.map(fn {cont, host} -> {cont, host_port(host)} end)
+    |> Enum.into(%{})
+  end
+
+  defp host_port(nil), do: nil
+  defp host_port(ports) do
+    ports
+    |> Enum.at(0)
+    |> Map.get("HostPort")
+  end
+
 end

@@ -18,7 +18,8 @@ defmodule DockerTest do
       with_running_container(fn container_id ->
         expected_container_info = %Docker.Container{
           id: container_id,
-          status: %Docker.Container.Status{state: :running, running: true}
+          status: %Docker.Container.Status{state: :running, running: true},
+          mapped_ports: %{}
         }
 
         assert {:ok, ^expected_container_info} = Docker.inspect_container(container_id)

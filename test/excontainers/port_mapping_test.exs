@@ -1,0 +1,23 @@
+defmodule PortMappingTest do
+  use ExUnit.Case, async: true
+  use Excontainers.ExUnit
+  alias Excontainers.Container
+
+  @http_echo_container Container.new(
+    "hashicorp/http-echo:0.2.3",
+    cmd: ["-listen=:8080", ~s(-text="hello world")],
+    exposed_ports: ["8080/tcp"]
+  )
+
+  container(:http_echo, @http_echo_container)
+
+  test "maps container ports to random ports on the host" do
+    port = Container.mapped_port(:http_echo, "8080/tcp")
+    |> String.to_integer()
+
+    {:ok, response} = Tesla.get("http://localhost:#{port}/")
+
+    assert response.body =~ "hello world"
+  end
+
+end

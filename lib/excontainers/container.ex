@@ -1,6 +1,6 @@
 defmodule Excontainers.Container do
-  def new(image, opts \\ [cmd: nil]) do
-    %Docker.ContainerConfig{image: image, cmd: opts[:cmd]}
+  def new(image, opts \\ [cmd: nil, exposed_ports: :nil]) do
+    %Docker.ContainerConfig{image: image, cmd: opts[:cmd], exposed_ports: opts[:exposed_ports]}
   end
 
   def info(container_name) do
@@ -8,5 +8,9 @@ defmodule Excontainers.Container do
     {:ok, container_info} = Docker.inspect_container(container_id)
 
     container_info
+  end
+
+  def mapped_port(container_name, container_port) do
+    info(container_name).mapped_ports[container_port]
   end
 end
