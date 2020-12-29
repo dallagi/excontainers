@@ -11,6 +11,12 @@ defmodule Excontainers.Container do
   end
 
   def mapped_port(container_name, container_port) do
+    container_port = set_protocol_to_tcp_if_not_specified(container_port)
     info(container_name).mapped_ports[container_port]
+
   end
+
+  # TODO: this is dupicated from Docker . Refactor it
+  defp set_protocol_to_tcp_if_not_specified(port) when is_binary(port), do: port
+  defp set_protocol_to_tcp_if_not_specified(port) when is_integer(port), do: "#{port}/tcp"
 end

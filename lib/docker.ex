@@ -70,9 +70,13 @@ defmodule Docker do
 
   defp port_mapping_configuration(nil), do: %{}
   defp port_mapping_configuration(exposed_ports) do
+    exposed_ports = exposed_ports
+    |> Enum.map(&set_protocol_to_tcp_if_not_specified/1)
+
     exposed_ports_config = exposed_ports
     |> Enum.map(fn port -> {port, %{}} end)
     |> Enum.into(%{})
+
     port_bindings_config = exposed_ports
     |> Enum.map(fn port -> {port, [%{"HostPort" => ""}]} end)
     |> Enum.into(%{})
@@ -82,6 +86,9 @@ defmodule Docker do
       HostConfig: %{PortBindings: port_bindings_config}
     }
   end
+
+  defp set_protocol_to_tcp_if_not_specified(port) when is_binary(port), do: port
+  defp set_protocol_to_tcp_if_not_specified(port) when is_integer(port), do: "#{port}/tcp"
 
   defp docker_host do
     HackneyHost.from_docker_host(DockerHost.detect())
