@@ -1,15 +1,8 @@
 defmodule Docker do
-  @api_version "v1.41"
-  use Tesla
-
-  alias Docker.{Container, DockerHost, HackneyHost}
-
-  plug(Tesla.Middleware.BaseUrl, docker_host())
-  plug(Tesla.Middleware.JSON)
-  adapter(Tesla.Adapter.Hackney)
+  alias Docker.{Client, Container}
 
   def ping() do
-    case get(base_url() <> "/info") do
+    case Client.get("/info") do
       {:ok, %{status: 200}} -> :ok
       {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
@@ -17,7 +10,7 @@ defmodule Docker do
   end
 
   def inspect_container(container_id) do
-    case get(base_url() <> "/containers/#{container_id}/json") do
+    case Client.get("/containers/#{container_id}/json") do
       {:ok, %{status: 200, body: body}} -> {:ok, Container.parse_docker_response(body)}
       {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
@@ -37,7 +30,7 @@ defmodule Docker do
       %{name: name}
       |> remove_nil_values
 
-    case post(base_url() <> "/containers/create", data, query: query) do
+    case Client.post("/containers/create", data, query: query) do
       {:ok, %{status: 201, body: body}} -> {:ok, body["Id"]}
       {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
@@ -45,7 +38,7 @@ defmodule Docker do
   end
 
   def start_container(container_id) do
-    case post(base_url() <> "/containers/#{container_id}/start", %{}) do
+    case Client.post("/containers/#{container_id}/start", %{}) do
       {:ok, %{status: 204}} -> :ok
       {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
@@ -57,8 +50,8 @@ defmodule Docker do
     # enough to wait for container timeout
     http_timeout = (options[:timeout_seconds] + 1) * 1000
 
-    case post(
-           base_url() <> "/containers/#{container_id}/stop",
+    case Client.post(
+           "/containers/#{container_id}/stop",
            %{},
            query: query,
            opts: [adapter: [recv_timeout: http_timeout]]
@@ -72,10 +65,6 @@ defmodule Docker do
   defp port_mapping_configuration(nil), do: %{}
 
   defp port_mapping_configuration(exposed_ports) do
-    exposed_ports =
-      exposed_ports
-      |> Enum.map(&set_protocol_to_tcp_if_not_specified/1)
-
     exposed_ports_config =
       exposed_ports
       |> Enum.map(fn port -> {port, %{}} end)
@@ -91,15 +80,6 @@ defmodule Docker do
       HostConfig: %{PortBindings: port_bindings_config}
     }
   end
-
-  defp set_protocol_to_tcp_if_not_specified(port) when is_binary(port), do: port
-  defp set_protocol_to_tcp_if_not_specified(port) when is_integer(port), do: "#{port}/tcp"
-
-  defp docker_host do
-    HackneyHost.from_docker_host(DockerHost.detect())
-  end
-
-  defp base_url, do: "/" <> @api_version
 
   def remove_nil_values(map) do
     map
