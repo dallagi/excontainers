@@ -1,4 +1,4 @@
-defmodule Excontainers.TestsIsolationTest do
+defmodule Excontainers.ExUnit.TestsIsolationTest do
   use ExUnit.Case
 
   import ExUnit.CaptureIO

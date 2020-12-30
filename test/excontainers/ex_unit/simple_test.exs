@@ -1,4 +1,4 @@
-defmodule Excontainers.SimpleTest do
+defmodule Excontainers.ExUnit.SimpleTest do
   use ExUnit.Case, async: true
   use Excontainers.ExUnit
 

@@ -1,4 +1,4 @@
-defmodule PortMappingTest do
+defmodule Excontainers.ExUnit.PortMappingTest do
   use ExUnit.Case, async: true
   use Excontainers.ExUnit
   alias Excontainers.Container
