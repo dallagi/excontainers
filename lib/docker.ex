@@ -62,8 +62,6 @@ defmodule Docker do
     end
   end
 
-  defp port_mapping_configuration(nil), do: %{}
-
   defp port_mapping_configuration(exposed_ports) do
     exposed_ports_config =
       exposed_ports

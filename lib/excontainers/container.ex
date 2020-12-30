@@ -1,6 +1,10 @@
 defmodule Excontainers.Container do
-  def new(image, opts \\ [cmd: nil, exposed_ports: nil]) do
-    %Docker.ContainerConfig{image: image, cmd: opts[:cmd], exposed_ports: opts[:exposed_ports]}
+  def new(image, opts \\ []) do
+    exposed_ports =
+      Keyword.get(opts, :exposed_ports, [])
+      |> Enum.map(&set_protocol_to_tcp_if_not_specified/1)
+
+    %Docker.ContainerConfig{image: image, cmd: opts[:cmd], exposed_ports: exposed_ports}
   end
 
   def info(container_name) do
@@ -15,7 +19,6 @@ defmodule Excontainers.Container do
     info(container_name).mapped_ports[container_port]
   end
 
-  # TODO: this is dupicated from Docker . Refactor it
   defp set_protocol_to_tcp_if_not_specified(port) when is_binary(port), do: port
   defp set_protocol_to_tcp_if_not_specified(port) when is_integer(port), do: "#{port}/tcp"
 end
