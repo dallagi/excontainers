@@ -62,6 +62,8 @@ defmodule Docker do
     end
   end
 
+  def exec_and_wait(container_id, command), do: Docker.Exec.exec_and_wait(container_id, command)
+
   defp port_mapping_configuration(exposed_ports) do
     exposed_ports_config =
       exposed_ports
