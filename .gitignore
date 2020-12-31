@@ -28,3 +28,4 @@ excontainers-*.tar
 
 .idea/
 *.iml
+.vscode
