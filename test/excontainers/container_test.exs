@@ -1,7 +1,7 @@
 defmodule Excontainers.ContainerTest do
   use ExUnit.Case, async: true
 
-  alias Excontainers.Container
+  alias Excontainers.{Container, CommandWaitStrategy}
 
   describe "new/2" do
     test "creates container with given image" do
@@ -22,6 +22,17 @@ defmodule Excontainers.ContainerTest do
 
       {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
       assert running_containers_output =~ String.slice(container_id, 1..11)
+    end
+
+    test "waits for container to be ready according to the wait strategy" do
+      container_config = Container.new(
+        "alpine",
+        cmd: ["sh", "-c", "sleep 1 && touch /root/.ready && sleep infinity"],
+        wait_strategy: CommandWaitStrategy.new(["ls", "/root/.ready"])
+      )
+      {:ok, container_id} = Container.start(container_config)
+
+      assert {_stdout, _exit_code = 0} = System.cmd("docker", ["exec", container_id, "ls", "/root/.ready"])
     end
   end
 

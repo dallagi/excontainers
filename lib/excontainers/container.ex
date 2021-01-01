@@ -1,15 +1,20 @@
 defmodule Excontainers.Container do
+  alias Excontainers.WaitStrategy
+
   def new(image, opts \\ []) do
     exposed_ports =
       Keyword.get(opts, :exposed_ports, [])
       |> Enum.map(&set_protocol_to_tcp_if_not_specified/1)
 
-    %Docker.ContainerConfig{image: image, cmd: opts[:cmd], exposed_ports: exposed_ports}
+    %Docker.ContainerConfig{image: image, cmd: opts[:cmd], exposed_ports: exposed_ports, wait_strategy: opts[:wait_strategy]}
   end
 
   def start(container_config) do
     {:ok, container_id} = Docker.create_container(container_config)
     :ok = Docker.start_container(container_id)
+    if container_config.wait_strategy do
+      :ok = WaitStrategy.wait_until_container_is_ready(container_config.wait_strategy, container_id)
+    end
     {:ok, container_id}
   end
 
