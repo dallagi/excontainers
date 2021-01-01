@@ -9,8 +9,8 @@ defmodule Excontainers.ContainerTest do
     end
 
     test "when exposing ports, exposes them for TCP by default" do
-      expected_config = %Docker.ContainerConfig{image: "some-image", exposed_ports: ["1111/tcp", "2222/udp"]}
-      assert Container.new("some-image", exposed_ports: [1111, "2222/udp"]) == expected_config
+      container_config = Container.new("any", exposed_ports: [1111, "2222/udp"])
+      assert container_config.exposed_ports == ["1111/tcp", "2222/udp"]
     end
   end
 end
