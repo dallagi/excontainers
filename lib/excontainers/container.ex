@@ -16,12 +16,12 @@ defmodule Excontainers.Container do
   end
 
   def start(container_config) do
-    {:ok, container_id} = Docker.create_container(container_config)
-    :ok = Docker.start_container(container_id)
-    if container_config.wait_strategy do
-      :ok = WaitStrategy.wait_until_container_is_ready(container_config.wait_strategy, container_id)
+    case Docker.create_container(container_config) do
+      {:ok, container_id} -> do_start(container_id, container_config)
+      {:error, {:http_error, 404}} ->
+        Docker.pull_image(container_config.image)
+        start(container_config)
     end
-    {:ok, container_id}
   end
 
   def stop(container_name, opts) when is_atom(container_name), do: stop(lookup_container(container_name), opts)
@@ -32,6 +32,14 @@ defmodule Excontainers.Container do
     {:ok, container_info} = Docker.inspect_container(container_id)
 
     container_info
+  end
+
+  defp do_start(container_id, container_config) do
+    :ok = Docker.start_container(container_id)
+    if container_config.wait_strategy do
+      :ok = WaitStrategy.wait_until_container_is_ready(container_config.wait_strategy, container_id)
+    end
+    {:ok, container_id}
   end
 
   def mapped_port(container, container_port) do

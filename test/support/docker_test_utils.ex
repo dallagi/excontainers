@@ -21,4 +21,12 @@ defmodule Support.DockerTestUtils do
   end
 
   def remove_container(id_or_name), do: System.cmd("docker", ["rm", "-f", id_or_name], stderr_to_stdout: true)
+
+  def image_exists?(image_name) do
+    {stdout, _exit_code=0} = System.cmd("docker", ["images", "-q", image_name])
+
+    stdout != ""
+  end
+
+  def remove_image(image_name), do: System.cmd("docker", ["rmi", image_name])
 end

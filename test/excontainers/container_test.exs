@@ -37,6 +37,18 @@ defmodule Excontainers.ContainerTest do
 
       assert {_stdout, _exit_code = 0} = System.cmd("docker", ["exec", container_id, "ls", "/root/.ready"])
     end
+
+    test "when image does not exist, automatically fetches it before starting the container" do
+      image_that_no_one_should_be_using = "busybox:1.24.1-uclibc"
+      container_config = Container.new(image_that_no_one_should_be_using, cmd: ["sleep", "infinity"])
+      remove_image(image_that_no_one_should_be_using)
+      refute image_exists?(image_that_no_one_should_be_using)
+
+      {:ok, container_id} = Container.start(container_config)
+      on_exit(fn -> remove_container(container_id) end)
+
+      assert image_exists?(image_that_no_one_should_be_using)
+    end
   end
 
   describe "mapped_port/2" do

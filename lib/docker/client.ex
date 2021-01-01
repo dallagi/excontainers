@@ -9,6 +9,13 @@ defmodule Docker.Client do
   plug(Tesla.Middleware.JSON)
   adapter(Tesla.Adapter.Hackney)
 
+  def plain_text do
+    Tesla.client(
+      [{Tesla.Middleware.BaseUrl, base_url()}],
+      Tesla.Adapter.Hackney
+    )
+  end
+
   defp base_url, do: docker_host() <> "/" <> @api_version
 
   defp docker_host do

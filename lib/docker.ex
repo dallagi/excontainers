@@ -24,4 +24,12 @@ defmodule Docker do
   def stop_container(container_id, options \\ [timeout_seconds: 10]), do: Container.stop(container_id, options)
 
   def exec_and_wait(container_id, command), do: Docker.Exec.exec_and_wait(container_id, command)
+
+  def pull_image(name) do
+    case Tesla.post(Client.plain_text(), "/images/create", "", query: %{fromImage: name}) do
+      {:ok, %{status: 200}} -> :ok
+      {:ok, %{status: status}} -> {:error, {:http_error, status}}
+      {:error, message} -> {:error, message}
+    end
+  end
 end

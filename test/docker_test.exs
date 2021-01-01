@@ -121,4 +121,21 @@ defmodule DockerTest do
       assert {:error, _} = Docker.stop_container("unexisting-container-#{UUID.uuid4()}")
     end
   end
+
+  describe "pull_image/1" do
+    test "pulls the image if it does not exist" do
+      image_that_no_one_should_be_using = "busybox:1.24.2-uclibc"
+      remove_image(image_that_no_one_should_be_using)
+
+      refute image_exists?(image_that_no_one_should_be_using)
+
+      :ok = Docker.pull_image(image_that_no_one_should_be_using)
+
+      assert image_exists?(image_that_no_one_should_be_using)
+    end
+
+    test "returns error when image does not exist" do
+      assert {:error, _} = Docker.stop_container("unexisting-image-#{UUID.uuid4()}")
+    end
+  end
 end
