@@ -1,4 +1,4 @@
-defmodule Docker.Container do
+defmodule Docker.ContainerState do
   defstruct [:id, :status, :mapped_ports]
 
   alias __MODULE__
@@ -16,10 +16,10 @@ defmodule Docker.Container do
   end
 
   def parse_docker_response(json_info) do
-    %Container{
+    %ContainerState{
       id: json_info["Id"],
-      status: %Container.Status{
-        state: Container.Status.parse_status(json_info["State"]["Status"]),
+      status: %ContainerState.Status{
+        state: ContainerState.Status.parse_status(json_info["State"]["Status"]),
         running: json_info["State"]["Running"]
       },
       mapped_ports: port_mapping(json_info["NetworkSettings"]["Ports"])

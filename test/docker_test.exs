@@ -18,9 +18,9 @@ defmodule DockerTest do
   describe "inspect_container/1" do
     test "returns info about running container" do
       container_id = run_a_container()
-      expected_container_info = %Docker.Container{
+      expected_container_info = %Docker.ContainerState{
         id: container_id,
-        status: %Docker.Container.Status{state: :running, running: true},
+        status: %Docker.ContainerState.Status{state: :running, running: true},
         mapped_ports: %{}
       }
 

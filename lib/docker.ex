@@ -1,5 +1,5 @@
 defmodule Docker do
-  alias Docker.{Client, Container}
+  alias Docker.{Client, ContainerState}
 
   def ping() do
     case Client.get("/_ping") do
@@ -11,7 +11,7 @@ defmodule Docker do
 
   def inspect_container(container_id) do
     case Client.get("/containers/#{container_id}/json") do
-      {:ok, %{status: 200, body: body}} -> {:ok, Container.parse_docker_response(body)}
+      {:ok, %{status: 200, body: body}} -> {:ok, ContainerState.parse_docker_response(body)}
       {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
     end
