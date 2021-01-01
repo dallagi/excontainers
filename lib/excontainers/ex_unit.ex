@@ -13,12 +13,11 @@ defmodule Excontainers.ExUnit do
   defmacro container(name, config) do
     quote do
       setup do
-        {:ok, container_id} = Docker.create_container(unquote(config))
+        {:ok, container_id} = Excontainers.Container.start(unquote(config))
         Excontainers.Agent.register_container(unquote(name), container_id)
 
-        on_exit(fn -> Docker.stop_container(container_id, timeout_seconds: 2) end)
+        on_exit(fn -> Excontainers.Container.stop(container_id, timeout_seconds: 2) end)
 
-        :ok = Docker.start_container(container_id)
         :ok
       end
     end

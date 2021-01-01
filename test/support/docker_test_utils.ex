@@ -14,7 +14,6 @@ defmodule Support.DockerTestUtils do
     quote do
       {stdout, _exit_code = 0} = System.cmd("docker", ["run", "-d", "--rm", "alpine:20201218", "sleep", "infinity"])
       container_id = String.trim(stdout)
-
       on_exit(fn -> remove_container(container_id) end)
 
       container_id

@@ -7,18 +7,29 @@ defmodule Excontainers.Container do
     %Docker.ContainerConfig{image: image, cmd: opts[:cmd], exposed_ports: exposed_ports}
   end
 
-  def info(container_name) do
-    container_id = Excontainers.Agent.lookup_container(container_name)
+  def start(container_config) do
+    {:ok, container_id} = Docker.create_container(container_config)
+    :ok = Docker.start_container(container_id)
+    {:ok, container_id}
+  end
+
+  def stop(container_name, opts) when is_atom(container_name), do: stop(lookup_container(container_name), opts)
+  def stop(container_id, opts) when is_binary(container_id), do: Docker.stop_container(container_id, opts)
+
+  def info(container_name) when is_atom(container_name), do: info(lookup_container(container_name))
+  def info(container_id) when is_binary(container_id) do
     {:ok, container_info} = Docker.inspect_container(container_id)
 
     container_info
   end
 
-  def mapped_port(container_name, container_port) do
+  def mapped_port(container, container_port) do
     container_port = set_protocol_to_tcp_if_not_specified(container_port)
-    info(container_name).mapped_ports[container_port]
+    info(container).mapped_ports[container_port]
   end
 
   defp set_protocol_to_tcp_if_not_specified(port) when is_binary(port), do: port
   defp set_protocol_to_tcp_if_not_specified(port) when is_integer(port), do: "#{port}/tcp"
+
+  defp lookup_container(container_name), do: Excontainers.Agent.lookup_container(container_name)
 end
