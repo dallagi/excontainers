@@ -20,11 +20,9 @@ defmodule Docker do
   def create_container(container_config, name \\ nil) do
     data =
       %{Image: container_config.image, Cmd: container_config.cmd}
-      |> remove_nil_values
-
-    data =
-      data
       |> Map.merge(port_mapping_configuration(container_config.exposed_ports))
+      |> Map.merge(environment_configuration(container_config.environment))
+      |> remove_nil_values
 
     query =
       %{name: name}
@@ -79,6 +77,14 @@ defmodule Docker do
       ExposedPorts: exposed_ports_config,
       HostConfig: %{PortBindings: port_bindings_config}
     }
+  end
+
+  defp environment_configuration(nil), do: %{}
+  defp environment_configuration(environment) do
+    env_for_docker = environment
+    |> Enum.map(fn {key, value} -> "#{key}=#{value}" end)
+
+    %{Env: env_for_docker}
   end
 
   def remove_nil_values(map) do

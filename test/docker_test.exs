@@ -63,6 +63,21 @@ defmodule DockerTest do
       assert container_port =~ "1234/tcp"
     end
 
+    test "supports setting environment variables" do
+      config = %Docker.ContainerConfig{
+        image: "alpine:20201218",
+        cmd: ["sleep", "infinity"],
+        environment: %{"TEST_VARIABLE" => "test value"}
+      }
+
+      {:ok, container_id} = Docker.create_container(config)
+      on_exit(fn -> remove_container(container_id) end)
+
+      System.cmd("docker", ["start", container_id])
+      {stdout, _exit_code = 0} = System.cmd("docker", ["exec", container_id, "sh", "-c", "echo $TEST_VARIABLE"])
+      assert stdout =~ "test value"
+    end
+
     test "returns error when container configuration is invalid" do
       config = %Docker.ContainerConfig{image: "invalid image"}
 
