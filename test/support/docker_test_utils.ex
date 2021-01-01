@@ -1,21 +1,23 @@
 defmodule Support.DockerTestUtils do
-  defmacro with_created_container(block) do
+  defmacro create_a_container() do
     quote do
       {stdout, _exit_code = 0} = System.cmd("docker", ["create", "alpine:20201218", "sleep", "infinity"])
       container_id = String.trim(stdout)
+
       on_exit(fn -> remove_container(container_id) end)
 
-      unquote(block).(container_id)
+      container_id
     end
   end
 
-  defmacro with_running_container(block) do
+  defmacro run_a_container() do
     quote do
       {stdout, _exit_code = 0} = System.cmd("docker", ["run", "-d", "--rm", "alpine:20201218", "sleep", "infinity"])
       container_id = String.trim(stdout)
 
-      unquote(block).(container_id)
       on_exit(fn -> remove_container(container_id) end)
+
+      container_id
     end
   end
 

@@ -17,15 +17,14 @@ defmodule DockerTest do
 
   describe "inspect_container/1" do
     test "returns info about running container" do
-      with_running_container(fn container_id ->
-        expected_container_info = %Docker.Container{
-          id: container_id,
-          status: %Docker.Container.Status{state: :running, running: true},
-          mapped_ports: %{}
-        }
+      container_id = run_a_container()
+      expected_container_info = %Docker.Container{
+        id: container_id,
+        status: %Docker.Container.Status{state: :running, running: true},
+        mapped_ports: %{}
+      }
 
-        assert {:ok, ^expected_container_info} = Docker.inspect_container(container_id)
-      end)
+      assert {:ok, ^expected_container_info} = Docker.inspect_container(container_id)
     end
 
     test "returns error when container does not exist" do
@@ -73,12 +72,12 @@ defmodule DockerTest do
 
   describe "start_container/1" do
     test "starts a created container" do
-      with_created_container(fn container_id ->
-        :ok = Docker.start_container(container_id)
+      container_id = create_a_container()
 
-        {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-        assert running_containers_output =~ String.slice(container_id, 1..11)
-      end)
+      :ok = Docker.start_container(container_id)
+
+      {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
+      assert running_containers_output =~ String.slice(container_id, 1..11)
     end
 
     test "returns error when container does not exist" do
@@ -88,21 +87,19 @@ defmodule DockerTest do
 
   describe "stop_container/1" do
     test "stops a running container" do
-      with_running_container(fn container_id ->
-        :ok = Docker.stop_container(container_id, timeout_seconds: 1)
+      container_id = run_a_container()
+      :ok = Docker.stop_container(container_id, timeout_seconds: 1)
 
-        {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-        refute running_containers_output =~ String.slice(container_id, 1..11)
-      end)
+      {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
+      refute running_containers_output =~ String.slice(container_id, 1..11)
     end
 
     test "returns :ok and does nothing if container was already stopped" do
-      with_created_container(fn container_id ->
-        :ok = Docker.stop_container(container_id)
+      container_id = create_a_container()
+      :ok = Docker.stop_container(container_id)
 
-        {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-        refute running_containers_output =~ String.slice(container_id, 1..11)
-      end)
+      {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
+      refute running_containers_output =~ String.slice(container_id, 1..11)
     end
 
     test "returns error when container does not exist" do
