@@ -1,6 +1,8 @@
 defmodule DockerTest do
   use ExUnit.Case, async: true
 
+  import Support.DockerTestUtils
+
   describe "ping/0" do
     test "returns :ok when communication with docker is successful" do
       assert Docker.ping() == :ok
@@ -107,22 +109,4 @@ defmodule DockerTest do
       assert {:error, _} = Docker.stop_container("unexisting-container-#{UUID.uuid4()}")
     end
   end
-
-  defp with_created_container(block) do
-    {stdout, _exit_code = 0} = System.cmd("docker", ["create", "alpine:20201218", "sleep", "infinity"])
-    container_id = String.trim(stdout)
-    on_exit(fn -> remove_container(container_id) end)
-
-    block.(container_id)
-  end
-
-  defp with_running_container(block) do
-    {stdout, _exit_code = 0} = System.cmd("docker", ["run", "-d", "--rm", "alpine:20201218", "sleep", "infinity"])
-    container_id = String.trim(stdout)
-    on_exit(fn -> remove_container(container_id) end)
-
-    block.(container_id)
-  end
-
-  defp remove_container(id_or_name), do: System.cmd("docker", ["rm", "-f", id_or_name], stderr_to_stdout: true)
 end
