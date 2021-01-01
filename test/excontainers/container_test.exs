@@ -1,6 +1,7 @@
 defmodule Excontainers.ContainerTest do
   use ExUnit.Case, async: true
 
+  import Support.DockerTestUtils
   alias Excontainers.{Container, CommandWaitStrategy}
 
   describe "new/2" do
@@ -19,6 +20,7 @@ defmodule Excontainers.ContainerTest do
       container_config = Container.new("alpine", cmd: ["sleep", "infinity"])
 
       {:ok, container_id} = Container.start(container_config)
+      on_exit(fn -> remove_container(container_id) end)
 
       {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
       assert running_containers_output =~ String.slice(container_id, 1..11)
@@ -31,6 +33,7 @@ defmodule Excontainers.ContainerTest do
         wait_strategy: CommandWaitStrategy.new(["ls", "/root/.ready"])
       )
       {:ok, container_id} = Container.start(container_config)
+      on_exit(fn -> remove_container(container_id) end)
 
       assert {_stdout, _exit_code = 0} = System.cmd("docker", ["exec", container_id, "ls", "/root/.ready"])
     end
@@ -51,7 +54,6 @@ defmodule Excontainers.ContainerTest do
       assert response.body =~ "hello world"
     end
   end
-
 
   defp run_a_container(container) do
     {:ok, container_id} = Container.start(container)
