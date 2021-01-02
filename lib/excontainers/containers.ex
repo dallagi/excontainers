@@ -1,4 +1,7 @@
-defmodule Excontainers.Container do
+defmodule Excontainers.Containers do
+  @moduledoc """
+  High-level functions to interact with Docker.
+  """
   alias Excontainers.WaitStrategy
 
   def new(image, opts \\ []) do

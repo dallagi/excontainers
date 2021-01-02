@@ -17,6 +17,7 @@ defmodule Docker.Api do
     end
   end
 
+  # TODO: use defdelegate instead
   def create_container(container_config, name \\ nil), do: Container.create(container_config, name)
 
   def start_container(container_id), do: Container.start(container_id)
