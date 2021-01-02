@@ -25,27 +25,21 @@ be found at [https://hexdocs.pm/excontainers](https://hexdocs.pm/excontainers).
 
 **More documentation to come as soon as this library reaches a mature-enough state**
 
-Create a throwaway postgres container within a ExUnit test:
+Create a throwaway redis container within a ExUnit test:
 
 ``` elixir
-defmodule Excontainers.PostgresContainerTest do
+defmodule Excontainers.RedisContainerTest do
   use ExUnit.Case, async: true
-  use Excontainers.ExUnit
+  import Excontainers.ExUnit
 
-  alias Excontainers.{Container, PostgresContainer}
+  alias Excontainers.RedisContainer
 
-  container(:postgres, PostgresContainer.new())
+  container(:redis, RedisContainer.new())
 
-  test "provides a ready-to-use postgres container" do
-    {:ok, pid} = Postgrex.start_link(
-      hostname: "localhost",
-      port: Container.mapped_port(:postgres, 5432),
-      username: "test",
-      password: "test",
-      database: "test"
-    )
+  test "provides a ready-to-use redis container", %{redis: redis} do
+    {:ok, conn} = Redix.start_link(RedisContainer.connection_url(redis))
 
-    assert %{num_rows: 1} = Postgrex.query!(pid, "SELECT 1", [])
+    assert Redix.command!(conn, ["PING"]) == "PONG"
   end
 end
 ```
