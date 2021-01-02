@@ -54,6 +54,4 @@ defmodule Excontainers.Containers do
 
   defp set_protocol_to_tcp_if_not_specified(port) when is_binary(port), do: port
   defp set_protocol_to_tcp_if_not_specified(port) when is_integer(port), do: "#{port}/tcp"
-
-  defp lookup_container(container_name), do: Excontainers.Agent.lookup_container(container_name)
 end
