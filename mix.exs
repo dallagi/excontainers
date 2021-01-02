@@ -35,11 +35,14 @@ defmodule Excontainers.MixProject do
       {:jason, ">= 1.0.0"},
       {:tesla, "~> 1.4.0"},
       {:gestalt, "~> 1.0"},
+
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:elixir_uuid, "~> 1.2", only: [:dev, :test]},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
-      {:postgrex, "~> 0.15", only: [:dev, :test]}
+
+      {:postgrex, "~> 0.15", only: [:dev, :test]},
+      {:redix, ">= 0.0.0", only: [:dev, :test]},
     ]
   end
 
