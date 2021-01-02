@@ -31,7 +31,8 @@ defmodule Excontainers.MixProject do
       {:tesla, "~> 1.4.0"},
       {:gestalt, "~> 1.0"},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:postgrex, "~> 0.15", only: [:dev, :test]},
     ]
   end
 
