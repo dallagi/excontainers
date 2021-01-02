@@ -23,7 +23,7 @@ defmodule Docker.Api do
 
   defdelegate stop_container(container_id, options \\ []), to: Container, as: :stop
 
-  def exec_and_wait(container_id, command), do: Docker.Exec.exec_and_wait(container_id, command)
+  defdelegate exec_and_wait(container_id, command), to: Docker.Exec, as: :exec_and_wait
 
   def pull_image(name) do
     case Tesla.post(Client.plain_text(), "/images/create", "", query: %{fromImage: name}) do
