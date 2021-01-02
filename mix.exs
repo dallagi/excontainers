@@ -4,11 +4,17 @@ defmodule Excontainers.MixProject do
   def project do
     [
       app: :excontainers,
+      description: "Throwaway containers for your tests",
+      source_url: "https://github.com/dallagi/excontainers",
       version: "0.1.0",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      elixirc_paths: elixirc_paths(Mix.env())
+      elixirc_paths: elixirc_paths(Mix.env()),
+      package: [
+        links: %{"GitHub" => "https://github.com/dallagi/excontainers"},
+        licenses: ["GPL-3.0-or-later"],
+      ]
     ]
   end
 
