@@ -1,14 +1,14 @@
 defmodule Excontainers.PostgresContainerTest do
   use ExUnit.Case, async: true
-  use Excontainers.ExUnit
+  import Excontainers.ExUnit
 
   alias Excontainers.PostgresContainer
 
   describe "with default configuration" do
     container(:postgres, PostgresContainer.new())
 
-    test "provides a ready-to-use postgres container" do
-      {:ok, pid} = Postgrex.start_link(PostgresContainer.connection_parameters(:postgres))
+    test "provides a ready-to-use postgres container", %{postgres: postgres} do
+      {:ok, pid} = Postgrex.start_link(PostgresContainer.connection_parameters(postgres))
 
       assert %{num_rows: 1} = Postgrex.query!(pid, "SELECT 1", [])
     end
@@ -23,14 +23,14 @@ defmodule Excontainers.PostgresContainerTest do
 
     container(:postgres, @custom_postgres)
 
-    test "provides a postgres container compliant with specified configuration" do
+    test "provides a postgres container compliant with specified configuration", %{postgres: postgres} do
       {:ok, pid} =
         Postgrex.start_link(
           username: "custom-user",
           password: "custom-password",
           database: "custom-database",
           hostname: "localhost",
-          port: PostgresContainer.port(:postgres)
+          port: PostgresContainer.port(postgres)
         )
 
       query_result = Postgrex.query!(pid, "SELECT version()", [])

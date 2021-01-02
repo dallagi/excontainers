@@ -6,17 +6,17 @@ defmodule Excontainers.ExUnit.TestsIsolationTest do
   test "containers are re-created for each test" do
     defmodule SampleTest do
       use ExUnit.Case
-      use Excontainers.ExUnit
+      import Excontainers.ExUnit
       alias Excontainers.{Container, Containers}
 
       container(:alpine, Containers.new("alpine:20201218", cmd: ["sleep", "infinity"]))
 
-      test "a test" do
-        IO.puts("<container_id:#{Container.container_id(:alpine)}>")
+      test "a test", %{alpine: alpine} do
+        IO.puts("<container_id:#{Container.container_id(alpine)}>")
       end
 
-      test "another test" do
-        IO.puts("<container_id:#{Container.container_id(:alpine)}>")
+      test "another test", %{alpine: alpine} do
+        IO.puts("<container_id:#{Container.container_id(alpine)}>")
       end
     end
 

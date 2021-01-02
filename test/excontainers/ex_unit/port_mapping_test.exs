@@ -1,6 +1,6 @@
 defmodule Excontainers.ExUnit.PortMappingTest do
   use ExUnit.Case, async: true
-  use Excontainers.ExUnit
+  import Excontainers.ExUnit
   alias Excontainers.{Container, Containers}
 
   @http_echo_container Containers.new(
@@ -11,8 +11,8 @@ defmodule Excontainers.ExUnit.PortMappingTest do
 
   container(:http_echo, @http_echo_container)
 
-  test "maps container ports to random ports on the host" do
-    port = Container.mapped_port(:http_echo, 8080)
+  test "maps container ports to random ports on the host", %{http_echo: http_echo} do
+    port = Container.mapped_port(http_echo, 8080)
 
     {:ok, response} = Tesla.get("http://localhost:#{port}/")
 
