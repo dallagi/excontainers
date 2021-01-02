@@ -17,12 +17,11 @@ defmodule Docker.Api do
     end
   end
 
-  # TODO: use defdelegate instead
-  def create_container(container_config, name \\ nil), do: Container.create(container_config, name)
+  defdelegate create_container(container_config, name \\ nil), to: Container, as: :create
 
-  def start_container(container_id), do: Container.start(container_id)
+  defdelegate start_container(container_id), to: Container, as: :start
 
-  def stop_container(container_id, options \\ [timeout_seconds: 10]), do: Container.stop(container_id, options)
+  defdelegate stop_container(container_id, options \\ []), to: Container, as: :stop
 
   def exec_and_wait(container_id, command), do: Docker.Exec.exec_and_wait(container_id, command)
 

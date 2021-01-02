@@ -27,10 +27,12 @@ defmodule Docker.Container do
     end
   end
 
-  def stop(container_id, options \\ [timeout_seconds: 10]) do
-    query = %{t: options[:timeout_seconds]} |> remove_nil_values
+  def stop(container_id, options \\ []) do
+    timeout_seconds = Keyword.get(options, :timeout_seconds, 10)
     # enough to wait for container timeout
-    http_timeout = (options[:timeout_seconds] + 1) * 1000
+    http_timeout = (timeout_seconds + 1) * 1000
+
+    query = %{t: timeout_seconds} |> remove_nil_values
 
     case Client.post(
            "/containers/#{container_id}/stop",
