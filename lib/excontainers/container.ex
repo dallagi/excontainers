@@ -2,9 +2,7 @@ defmodule Excontainers.Container do
   @moduledoc """
   GenServer to interact with a docker container.
   """
-  # TODO: replace Excontianers.Container with this module
   use Agent
-  # use GenServer
 
   alias __MODULE__
   alias Excontainers.Containers
