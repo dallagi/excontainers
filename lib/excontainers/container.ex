@@ -16,26 +16,26 @@ defmodule Excontainers.Container do
   end
 
   def start(container_config) do
-    case Docker.create_container(container_config) do
+    case Docker.Api.create_container(container_config) do
       {:ok, container_id} -> do_start(container_id, container_config)
       {:error, {:http_error, 404}} ->
-        Docker.pull_image(container_config.image)
+        Docker.Api.pull_image(container_config.image)
         start(container_config)
     end
   end
 
   def stop(container_name, opts) when is_atom(container_name), do: stop(lookup_container(container_name), opts)
-  def stop(container_id, opts) when is_binary(container_id), do: Docker.stop_container(container_id, opts)
+  def stop(container_id, opts) when is_binary(container_id), do: Docker.Api.stop_container(container_id, opts)
 
   def info(container_name) when is_atom(container_name), do: info(lookup_container(container_name))
   def info(container_id) when is_binary(container_id) do
-    {:ok, container_info} = Docker.inspect_container(container_id)
+    {:ok, container_info} = Docker.Api.inspect_container(container_id)
 
     container_info
   end
 
   defp do_start(container_id, container_config) do
-    :ok = Docker.start_container(container_id)
+    :ok = Docker.Api.start_container(container_id)
     if container_config.wait_strategy do
       :ok = WaitStrategy.wait_until_container_is_ready(container_config.wait_strategy, container_id)
     end

@@ -1,4 +1,4 @@
-defmodule Docker do
+defmodule Docker.Api do
   alias Docker.{Client, Container, ContainerState}
 
   def ping() do
