@@ -13,7 +13,7 @@ defmodule Excontainers.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       package: [
         links: %{"GitHub" => "https://github.com/dallagi/excontainers"},
-        licenses: ["GPL-3.0-or-later"],
+        licenses: ["GPL-3.0-or-later"]
       ]
     ]
   end
@@ -39,7 +39,7 @@ defmodule Excontainers.MixProject do
       {:elixir_uuid, "~> 1.2", only: [:dev, :test]},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
-      {:postgrex, "~> 0.15", only: [:dev, :test]},
+      {:postgrex, "~> 0.15", only: [:dev, :test]}
     ]
   end
 

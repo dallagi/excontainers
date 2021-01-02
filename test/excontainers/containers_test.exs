@@ -27,11 +27,13 @@ defmodule Excontainers.ContainersTest do
     end
 
     test "waits for container to be ready according to the wait strategy" do
-      container_config = Containers.new(
-        "alpine",
-        cmd: ["sh", "-c", "sleep 1 && touch /root/.ready && sleep infinity"],
-        wait_strategy: CommandWaitStrategy.new(["ls", "/root/.ready"])
-      )
+      container_config =
+        Containers.new(
+          "alpine",
+          cmd: ["sh", "-c", "sleep 1 && touch /root/.ready && sleep infinity"],
+          wait_strategy: CommandWaitStrategy.new(["ls", "/root/.ready"])
+        )
+
       {:ok, container_id} = Containers.start(container_config)
       on_exit(fn -> remove_container(container_id) end)
 
@@ -53,10 +55,10 @@ defmodule Excontainers.ContainersTest do
 
   describe "mapped_port/2" do
     @http_echo_container Containers.new(
-      "hashicorp/http-echo:0.2.3",
-      cmd: ["-listen=:8080", ~s(-text="hello world")],
-      exposed_ports: [8080]
-    )
+                           "hashicorp/http-echo:0.2.3",
+                           cmd: ["-listen=:8080", ~s(-text="hello world")],
+                           exposed_ports: [8080]
+                         )
 
     test "gets the host port corresponding to a mapped port in the container" do
       container_id = run_a_container(@http_echo_container)

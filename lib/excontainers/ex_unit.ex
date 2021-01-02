@@ -16,7 +16,7 @@ defmodule Excontainers.ExUnit do
     quote do
       setup do
         {:ok, container_pid} = Container.start_link(unquote(config))
-        {:ok, container_id} = container_pid |> Container.start
+        {:ok, container_id} = container_pid |> Container.start()
 
         Excontainers.Agent.register_container(unquote(name), container_pid)
 

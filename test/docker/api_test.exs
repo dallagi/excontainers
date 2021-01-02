@@ -19,6 +19,7 @@ defmodule Docker.ApiTest do
   describe "inspect_container/1" do
     test "returns info about running container" do
       container_id = run_a_container()
+
       expected_container_info = %ContainerState{
         id: container_id,
         status: %ContainerState.Status{state: :running, running: true},

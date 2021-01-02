@@ -64,9 +64,11 @@ defmodule Docker.Container do
   end
 
   defp environment_configuration(nil), do: %{}
+
   defp environment_configuration(environment) do
-    env_for_docker = environment
-    |> Enum.map(fn {key, value} -> "#{key}=#{value}" end)
+    env_for_docker =
+      environment
+      |> Enum.map(fn {key, value} -> "#{key}=#{value}" end)
 
     %{Env: env_for_docker}
   end

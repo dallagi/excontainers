@@ -8,13 +8,14 @@ defmodule Excontainers.PostgresContainerTest do
     container(:postgres, PostgresContainer.new())
 
     test "provides a ready-to-use postgres container" do
-      {:ok, pid} = Postgrex.start_link(
-        hostname: "localhost",
-        port: Container.mapped_port(:postgres, 5432),
-        username: "test",
-        password: "test",
-        database: "test"
-      )
+      {:ok, pid} =
+        Postgrex.start_link(
+          hostname: "localhost",
+          port: Container.mapped_port(:postgres, 5432),
+          username: "test",
+          password: "test",
+          database: "test"
+        )
 
       assert %{num_rows: 1} = Postgrex.query!(pid, "SELECT 1", [])
     end

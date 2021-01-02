@@ -21,4 +21,4 @@ defmodule Docker.Client do
   defp docker_host do
     HackneyHost.from_docker_host(DockerHost.detect())
   end
- end
+end

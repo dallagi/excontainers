@@ -40,10 +40,10 @@ defmodule Excontainers.ContainerTest do
 
   describe "mapped_port" do
     @http_echo_container Containers.new(
-      "hashicorp/http-echo:0.2.3",
-      cmd: ["-listen=:8080", ~s(-text="hello world")],
-      exposed_ports: [8080]
-    )
+                           "hashicorp/http-echo:0.2.3",
+                           cmd: ["-listen=:8080", ~s(-text="hello world")],
+                           exposed_ports: [8080]
+                         )
 
     test "gets the host port corresponding to a mapped port in the container" do
       {:ok, pid} = Container.start_link(@http_echo_container)

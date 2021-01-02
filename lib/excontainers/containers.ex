@@ -20,7 +20,9 @@ defmodule Excontainers.Containers do
 
   def start(container_config) do
     case Docker.Api.create_container(container_config) do
-      {:ok, container_id} -> do_start(container_id, container_config)
+      {:ok, container_id} ->
+        do_start(container_id, container_config)
+
       {:error, {:http_error, 404}} ->
         Docker.Api.pull_image(container_config.image)
         start(container_config)
@@ -37,9 +39,11 @@ defmodule Excontainers.Containers do
 
   defp do_start(container_id, container_config) do
     :ok = Docker.Api.start_container(container_id)
+
     if container_config.wait_strategy do
       :ok = WaitStrategy.wait_until_container_is_ready(container_config.wait_strategy, container_id)
     end
+
     {:ok, container_id}
   end
 

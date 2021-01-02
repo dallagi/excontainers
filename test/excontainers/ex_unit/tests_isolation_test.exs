@@ -4,7 +4,6 @@ defmodule Excontainers.ExUnit.TestsIsolationTest do
   import ExUnit.CaptureIO
 
   test "containers are re-created for each test" do
-
     defmodule SampleTest do
       use ExUnit.Case
       use Excontainers.ExUnit
@@ -44,7 +43,7 @@ defmodule Excontainers.ExUnit.TestsIsolationTest do
   defp configure_and_reload_on_exit() do
     old_opts = ExUnit.configuration()
 
-    ExUnit.configure([autorun: false, seed: 0, colors: [enabled: false], exclude: [:exclude]])
+    ExUnit.configure(autorun: false, seed: 0, colors: [enabled: false], exclude: [:exclude])
 
     on_exit(fn -> ExUnit.configure(old_opts) end)
   end
