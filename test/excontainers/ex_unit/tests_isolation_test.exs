@@ -8,16 +8,16 @@ defmodule Excontainers.ExUnit.TestsIsolationTest do
     defmodule SampleTest do
       use ExUnit.Case
       use Excontainers.ExUnit
-      alias Excontainers.Container
+      alias Excontainers.{Container, Containers}
 
-      container(:alpine, Container.new("alpine:20201218", cmd: ["sleep", "infinity"]))
+      container(:alpine, Containers.new("alpine:20201218", cmd: ["sleep", "infinity"]))
 
       test "a test" do
-        IO.puts("<container_id:#{Container.info(:alpine).id}>")
+        IO.puts("<container_id:#{Container.container_id(:alpine)}>")
       end
 
       test "another test" do
-        IO.puts("<container_id:#{Container.info(:alpine).id}>")
+        IO.puts("<container_id:#{Container.container_id(:alpine)}>")
       end
     end
 

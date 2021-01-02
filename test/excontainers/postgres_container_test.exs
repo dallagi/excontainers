@@ -2,7 +2,7 @@ defmodule Excontainers.PostgresContainerTest do
   use ExUnit.Case, async: true
   use Excontainers.ExUnit
 
-  alias Excontainers.{Containers, PostgresContainer}
+  alias Excontainers.{Container, PostgresContainer}
 
   describe "with default configuration" do
     container(:postgres, PostgresContainer.new())
@@ -10,7 +10,7 @@ defmodule Excontainers.PostgresContainerTest do
     test "provides a ready-to-use postgres container" do
       {:ok, pid} = Postgrex.start_link(
         hostname: "localhost",
-        port: Containers.mapped_port(:postgres, 5432),
+        port: Container.mapped_port(:postgres, 5432),
         username: "test",
         password: "test",
         database: "test"

@@ -2,12 +2,12 @@ defmodule Excontainers.ExUnit.SimpleTest do
   use ExUnit.Case, async: true
   use Excontainers.ExUnit
 
-  alias Excontainers.Containers
+  alias Excontainers.{Container, Containers}
 
   container(:alpine, Containers.new("alpine:20201218", cmd: ["sleep", "infinity"]))
 
   test "container is ran during tests" do
-    container_id = Containers.info(:alpine).id
+    container_id = Container.container_id(:alpine)
 
     {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
     assert running_containers_output =~ String.slice(container_id, 1..11)

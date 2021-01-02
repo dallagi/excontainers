@@ -27,11 +27,9 @@ defmodule Excontainers.Containers do
     end
   end
 
-  def stop(container_name, opts) when is_atom(container_name), do: stop(lookup_container(container_name), opts)
-  def stop(container_id, opts) when is_binary(container_id), do: Docker.Api.stop_container(container_id, opts)
+  def stop(container_id, opts \\ []), do: Docker.Api.stop_container(container_id, opts)
 
-  def info(container_name) when is_atom(container_name), do: info(lookup_container(container_name))
-  def info(container_id) when is_binary(container_id) do
+  def info(container_id) do
     {:ok, container_info} = Docker.Api.inspect_container(container_id)
 
     container_info

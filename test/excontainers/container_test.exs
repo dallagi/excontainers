@@ -37,4 +37,22 @@ defmodule Excontainers.ContainerTest do
     {:ok, container_id} = Container.start(pid)
     assert Container.container_id(pid) == container_id
   end
+
+  describe "mapped_port" do
+    @http_echo_container Containers.new(
+      "hashicorp/http-echo:0.2.3",
+      cmd: ["-listen=:8080", ~s(-text="hello world")],
+      exposed_ports: [8080]
+    )
+
+    test "gets the host port corresponding to a mapped port in the container" do
+      {:ok, pid} = Container.start_link(@http_echo_container)
+      {:ok, _container_id} = Container.start(pid)
+
+      port = Container.mapped_port(pid, 8080)
+
+      {:ok, response} = Tesla.get("http://localhost:#{port}/")
+      assert response.body =~ "hello world"
+    end
+  end
 end

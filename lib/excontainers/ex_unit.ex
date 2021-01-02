@@ -1,4 +1,6 @@
 defmodule Excontainers.ExUnit do
+  alias Excontainers.{Container, Containers}
+
   defmacro __using__(_opts) do
     quote do
       import Excontainers.ExUnit
@@ -13,10 +15,12 @@ defmodule Excontainers.ExUnit do
   defmacro container(name, config) do
     quote do
       setup do
-        {:ok, container_id} = Excontainers.Containers.start(unquote(config))
-        Excontainers.Agent.register_container(unquote(name), container_id)
+        {:ok, container_pid} = Container.start_link(unquote(config))
+        {:ok, container_id} = container_pid |> Container.start
 
-        on_exit(fn -> Excontainers.Containers.stop(container_id, timeout_seconds: 2) end)
+        Excontainers.Agent.register_container(unquote(name), container_pid)
+
+        on_exit(fn -> Containers.stop(container_id, timeout_seconds: 2) end)
 
         :ok
       end
