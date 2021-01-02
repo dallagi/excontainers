@@ -64,7 +64,8 @@ mix test
 
 ## TODO
 
-* Se create_container ritorna 404 (ie. immagine non esistente), pullare l'immagine
-* Staccare Excontainers dal client Docker -> in tests unitari di Excontainers usare mocks
-* Creare Excontainers.start -> crea container (poi anche con labels extra) e lo fa partire
-* Add resources reaping (e.g., using ryuk ? )
+* To verify: timeout in pull_image is too low?
+* To verify: some tests appear to break on clean docker
+* Decouple Excontainer from Docker API client (and mock interaction with docker in non-e2e tests for Excontainers)
+* Add resources reaping (e.g., using testcontainers-ryuk)
+* Add logs wait strategy
