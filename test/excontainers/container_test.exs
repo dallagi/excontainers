@@ -1,6 +1,7 @@
 defmodule Excontainers.ContainerTest do
   use ExUnit.Case, async: true
 
+  import Support.DockerTestUtils
   alias Excontainers.{Container, Containers}
 
   @sample_container_config Containers.new("alpine", cmd: ["sleep", "infinity"])
@@ -9,6 +10,7 @@ defmodule Excontainers.ContainerTest do
     {:ok, pid} = Container.start_link(@sample_container_config)
 
     {:ok, container_id} = Container.start(pid)
+    on_exit(fn -> remove_container(container_id) end)
 
     {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
     assert running_containers_output =~ String.slice(container_id, 1..11)
@@ -35,6 +37,7 @@ defmodule Excontainers.ContainerTest do
     assert Container.container_id(pid) == nil
 
     {:ok, container_id} = Container.start(pid)
+    on_exit(fn -> remove_container(container_id) end)
     assert Container.container_id(pid) == container_id
   end
 
@@ -47,7 +50,8 @@ defmodule Excontainers.ContainerTest do
 
     test "gets the host port corresponding to a mapped port in the container" do
       {:ok, pid} = Container.start_link(@http_echo_container)
-      {:ok, _container_id} = Container.start(pid)
+      {:ok, container_id} = Container.start(pid)
+      on_exit(fn -> remove_container(container_id) end)
 
       port = Container.mapped_port(pid, 8080)
 
