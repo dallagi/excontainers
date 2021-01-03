@@ -23,7 +23,7 @@ defmodule Excontainers.ContainersTest do
       on_exit(fn -> remove_container(container_id) end)
 
       {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-      assert running_containers_output =~ String.slice(container_id, 1..11)
+      assert running_containers_output =~ short_id(container_id)
     end
 
     test "waits for container to be ready according to the wait strategy" do

@@ -29,4 +29,6 @@ defmodule Support.DockerTestUtils do
   end
 
   def remove_image(image_name), do: System.cmd("docker", ["rmi", image_name])
+
+  def short_id(docker_id), do: String.slice(docker_id, 1..11)
 end

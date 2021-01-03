@@ -44,7 +44,7 @@ defmodule Docker.ApiTest do
 
       {all_containers_output, _exit_code = 0} = System.cmd("docker", ["ps", "-a"])
       assert all_containers_output =~ unique_container_name
-      assert all_containers_output =~ String.slice(container_id, 1..11)
+      assert all_containers_output =~ short_id(container_id)
     end
 
     test "supports mapping ports on the container to random ports on the host" do
@@ -94,7 +94,7 @@ defmodule Docker.ApiTest do
       :ok = Api.start_container(container_id)
 
       {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-      assert running_containers_output =~ String.slice(container_id, 1..11)
+      assert running_containers_output =~ short_id(container_id)
     end
 
     test "returns error when container does not exist" do
@@ -108,7 +108,7 @@ defmodule Docker.ApiTest do
       :ok = Api.stop_container(container_id, timeout_seconds: 1)
 
       {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-      refute running_containers_output =~ String.slice(container_id, 1..11)
+      refute running_containers_output =~ short_id(container_id)
     end
 
     test "returns :ok and does nothing if container was already stopped" do
@@ -116,7 +116,7 @@ defmodule Docker.ApiTest do
       :ok = Api.stop_container(container_id)
 
       {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-      refute running_containers_output =~ String.slice(container_id, 1..11)
+      refute running_containers_output =~ short_id(container_id)
     end
 
     test "returns error when container does not exist" do
