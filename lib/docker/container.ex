@@ -2,11 +2,7 @@ defmodule Docker.Container do
   alias Docker.Client
 
   def create(container_config, name \\ nil) do
-    data =
-      %{Image: container_config.image, Cmd: container_config.cmd}
-      |> Map.merge(port_mapping_configuration(container_config.exposed_ports))
-      |> Map.merge(environment_configuration(container_config.environment))
-      |> remove_nil_values
+    data = container_create_payload(container_config)
 
     query =
       %{name: name}
@@ -46,31 +42,29 @@ defmodule Docker.Container do
     end
   end
 
-  defp port_mapping_configuration(exposed_ports) do
-    exposed_ports_config =
-      exposed_ports
-      |> Enum.map(fn port -> {port, %{}} end)
-      |> Enum.into(%{})
-
+  defp container_create_payload(container_config) do
     port_bindings_config =
-      exposed_ports
+      container_config.exposed_ports
       |> Enum.map(fn port -> {port, [%{"HostPort" => ""}]} end)
       |> Enum.into(%{})
 
-    %{
-      ExposedPorts: exposed_ports_config,
-      HostConfig: %{PortBindings: port_bindings_config}
-    }
-  end
+    exposed_ports_config =
+      container_config.exposed_ports
+      |> Enum.map(fn port -> {port, %{}} end)
+      |> Enum.into(%{})
 
-  defp environment_configuration(nil), do: %{}
-
-  defp environment_configuration(environment) do
-    env_for_docker =
-      environment
+    env_config =
+      container_config.environment
       |> Enum.map(fn {key, value} -> "#{key}=#{value}" end)
 
-    %{Env: env_for_docker}
+    %{
+      Image: container_config.image,
+      Cmd: container_config.cmd,
+      ExposedPorts: exposed_ports_config,
+      Env: env_config,
+      HostConfig: %{PortBindings: port_bindings_config, Privileged: container_config.privileged}
+    }
+    |> remove_nil_values
   end
 
   def remove_nil_values(map) do

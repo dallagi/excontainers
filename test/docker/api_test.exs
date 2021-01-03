@@ -80,6 +80,15 @@ defmodule Docker.ApiTest do
       assert stdout =~ "test value"
     end
 
+    test "supports setting containers as privileged" do
+      config = %ContainerConfig{image: "alpine:20201218", privileged: true}
+
+      {:ok, container_id} = Api.create_container(config)
+
+      {container_info, _exit_code = 0} = System.cmd("docker", ["inspect", container_id])
+      assert container_info =~ ~s("Privileged": true)
+    end
+
     test "returns error when container configuration is invalid" do
       config = %ContainerConfig{image: "invalid image"}
 
