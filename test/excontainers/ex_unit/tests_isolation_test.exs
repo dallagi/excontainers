@@ -1,6 +1,7 @@
 defmodule Excontainers.ExUnit.TestsIsolationTest do
   use ExUnit.Case
 
+  import Support.ExUnitTestUtils
   import ExUnit.CaptureIO
 
   test "containers are re-created for each test" do
@@ -30,21 +31,8 @@ defmodule Excontainers.ExUnit.TestsIsolationTest do
     assert first_container_id != second_container_id
   end
 
-  defp load_ex_unit do
-    ExUnit.Server.modules_loaded()
-    configure_and_reload_on_exit()
-  end
-
   defp parse_containers_ids_from_tests_output(tests_output) do
     Regex.scan(~r{<container_id:([0-9a-f]+)>}, tests_output)
     |> Enum.map(fn [_matched_substring, container_id] -> container_id end)
-  end
-
-  defp configure_and_reload_on_exit() do
-    old_opts = ExUnit.configuration()
-
-    ExUnit.configure(autorun: false, seed: 0, colors: [enabled: false], exclude: [:exclude])
-
-    on_exit(fn -> ExUnit.configure(old_opts) end)
   end
 end
