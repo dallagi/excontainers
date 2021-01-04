@@ -1,7 +1,7 @@
 defmodule Docker.ApiTest do
   use ExUnit.Case, async: true
 
-  alias Docker.{Api, ContainerConfig, ContainerState}
+  alias Docker.{Api, ContainerConfig, ContainerState, VolumeBinding}
   import Support.DockerTestUtils
 
   @alpine "alpine:20201218"
@@ -94,6 +94,21 @@ defmodule Docker.ApiTest do
 
       {container_info, _exit_code = 0} = System.cmd("docker", ["inspect", container_id])
       assert container_info =~ ~s("Privileged": true)
+    end
+
+    test "supports bind mounting volumes" do
+      config = %ContainerConfig{
+        image: @alpine,
+        cmd: ["sleep", "infinity"],
+        bind_mounts: [%VolumeBinding{host_src: Path.expand("mix.exs"), container_dest: "/root/mix.exs"}]
+      }
+
+      {:ok, container_id} = Api.create_container(config)
+      on_exit(fn -> remove_container(container_id) end)
+
+      System.cmd("docker", ["start", container_id])
+      {ls_output, _exit_code = 0} = System.cmd("docker", ["exec", container_id, "ls", "/root/mix.exs"])
+      assert ls_output =~ "mix.exs"
     end
 
     test "returns error when container configuration is invalid" do

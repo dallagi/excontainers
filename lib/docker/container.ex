@@ -57,12 +57,18 @@ defmodule Docker.Container do
       container_config.environment
       |> Enum.map(fn {key, value} -> "#{key}=#{value}" end)
 
+    volume_bindings =
+      container_config.bind_mounts
+      |> Enum.map(fn volume_binding ->
+        "#{volume_binding.host_src}:#{volume_binding.container_dest}:#{volume_binding.options}"
+      end)
+
     %{
       Image: container_config.image,
       Cmd: container_config.cmd,
       ExposedPorts: exposed_ports_config,
       Env: env_config,
-      HostConfig: %{PortBindings: port_bindings_config, Privileged: container_config.privileged}
+      HostConfig: %{PortBindings: port_bindings_config, Privileged: container_config.privileged, Binds: volume_bindings}
     }
     |> remove_nil_values
   end
