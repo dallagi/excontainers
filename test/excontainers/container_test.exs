@@ -20,7 +20,7 @@ defmodule Excontainers.ContainerTest do
     {:ok, pid} = Container.start_link(@sample_container_config)
     {:ok, container_id} = Container.start(pid)
 
-    :ok = Container.stop(pid)
+    :ok = Container.stop(pid, timeout_seconds: 1)
 
     {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
     refute running_containers_output =~ short_id(container_id)
