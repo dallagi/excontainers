@@ -1,6 +1,8 @@
 defmodule Docker.Api do
   alias Docker.{Client, Container, ContainerState}
 
+  @one_minute 60_000
+
   def ping() do
     case Client.get("/_ping") do
       {:ok, %{status: 200}} -> :ok
@@ -26,7 +28,10 @@ defmodule Docker.Api do
   defdelegate exec_and_wait(container_id, command), to: Docker.Exec, as: :exec_and_wait
 
   def pull_image(name) do
-    case Tesla.post(Client.plain_text(), "/images/create", "", query: %{fromImage: name}) do
+    case Tesla.post(Client.plain_text(), "/images/create", "",
+           query: %{fromImage: name},
+           opts: [adapter: [recv_timeout: @one_minute]]
+         ) do
       {:ok, %{status: 200}} -> :ok
       {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
