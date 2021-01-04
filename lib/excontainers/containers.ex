@@ -2,7 +2,7 @@ defmodule Excontainers.Containers do
   @moduledoc """
   High-level functions to interact with Docker.
   """
-  alias Excontainers.WaitStrategy
+  alias Excontainers.{Images, WaitStrategy}
 
   def new(image, opts \\ []) do
     exposed_ports =
@@ -24,7 +24,7 @@ defmodule Excontainers.Containers do
         do_start(container_id, container_config)
 
       {:error, {:http_error, 404}} ->
-        Docker.Api.pull_image(container_config.image)
+        Images.pull(container_config.image)
         start(container_config)
     end
   end

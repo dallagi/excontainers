@@ -56,6 +56,7 @@ mix test
 
 ## TODO
 
+* Better separate Docker from Excontainers (i.e. take non-strictly-api-related stuff out of Docker module)
 * To verify: timeout in pull_image is too low?
 * To verify: some tests appear to break on clean docker
 * To verify: apparently, API to pull images pulls ALL TAGS when no tag is given?!
