@@ -4,7 +4,7 @@ defmodule Excontainers.ContainerTest do
   import Support.DockerTestUtils
   alias Excontainers.{Container, Containers}
 
-  @sample_container_config Containers.new("alpine", cmd: ["sleep", "infinity"])
+  @sample_container_config Containers.new("alpine:20201218", cmd: ["sleep", "infinity"])
 
   test "starts a container" do
     {:ok, pid} = Container.start_link(@sample_container_config)

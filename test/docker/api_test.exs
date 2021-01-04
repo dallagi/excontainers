@@ -4,6 +4,13 @@ defmodule Docker.ApiTest do
   alias Docker.{Api, ContainerConfig, ContainerState}
   import Support.DockerTestUtils
 
+  @alpine "alpine:20201218"
+
+  setup_all do
+    pull_image(@alpine)
+    :ok
+  end
+
   describe "ping/0" do
     test "returns :ok when communication with docker is successful" do
       assert Api.ping() == :ok
@@ -37,7 +44,7 @@ defmodule Docker.ApiTest do
   describe "create_container/2" do
     test "creates a container with the specified config" do
       unique_container_name = "test_create_container_#{UUID.uuid4()}"
-      config = %ContainerConfig{image: "alpine:20201218", cmd: ["sleep", "infinity"]}
+      config = %ContainerConfig{image: @alpine, cmd: ["sleep", "infinity"]}
       on_exit(fn -> remove_container(unique_container_name) end)
 
       {:ok, container_id} = Api.create_container(config, unique_container_name)
@@ -51,7 +58,7 @@ defmodule Docker.ApiTest do
       unique_container_name = "test_create_container_#{UUID.uuid4()}"
 
       config = %ContainerConfig{
-        image: "alpine:20201218",
+        image: @alpine,
         cmd: ["sleep", "infinity"],
         exposed_ports: ["1234/tcp"]
       }
@@ -67,7 +74,7 @@ defmodule Docker.ApiTest do
 
     test "supports setting environment variables" do
       config = %ContainerConfig{
-        image: "alpine:20201218",
+        image: @alpine,
         cmd: ["sleep", "infinity"],
         environment: %{"TEST_VARIABLE" => "test value"}
       }
@@ -81,7 +88,7 @@ defmodule Docker.ApiTest do
     end
 
     test "supports setting containers as privileged" do
-      config = %ContainerConfig{image: "alpine:20201218", privileged: true}
+      config = %ContainerConfig{image: @alpine, privileged: true}
 
       {:ok, container_id} = Api.create_container(config)
 

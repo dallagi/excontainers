@@ -4,6 +4,8 @@ defmodule Excontainers.ContainersTest do
   import Support.DockerTestUtils
   alias Excontainers.{Containers, CommandWaitStrategy}
 
+  @alpine "alpine:20201218"
+
   describe "new/2" do
     test "creates container with given image" do
       assert Containers.new("some-image") == %Docker.ContainerConfig{image: "some-image"}
@@ -17,7 +19,7 @@ defmodule Excontainers.ContainersTest do
 
   describe "start/2" do
     test "creates and starts a container with the given config" do
-      container_config = Containers.new("alpine", cmd: ["sleep", "infinity"])
+      container_config = Containers.new(@alpine, cmd: ["sleep", "infinity"])
 
       {:ok, container_id} = Containers.start(container_config)
       on_exit(fn -> remove_container(container_id) end)
@@ -29,7 +31,7 @@ defmodule Excontainers.ContainersTest do
     test "waits for container to be ready according to the wait strategy" do
       container_config =
         Containers.new(
-          "alpine",
+          @alpine,
           cmd: ["sh", "-c", "sleep 1 && touch /root/.ready && sleep infinity"],
           wait_strategy: CommandWaitStrategy.new(["ls", "/root/.ready"])
         )
