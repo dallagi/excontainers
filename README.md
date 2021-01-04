@@ -17,9 +17,7 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/excontainers](https://hexdocs.pm/excontainers).
+Documentation can be found at [https://hexdocs.pm/excontainers](https://hexdocs.pm/excontainers).
 
 ## Usage
 
@@ -60,6 +58,10 @@ mix test
 
 * To verify: timeout in pull_image is too low?
 * To verify: some tests appear to break on clean docker
+* To verify: apparently, API to pull images pulls ALL TAGS when no tag is given?!
 * Decouple Excontainer from Docker API client (and mock interaction with docker in non-e2e tests for Excontainers)
 * Add resources reaping (e.g., using testcontainers-ryuk)
 * Add logs wait strategy
+* Add TCP connection available wait strategy, and use it in tests that rely on echo http server, as sometimes it fails for not being initialized in time
+* Setup CI (use circle instead of github? )
+
