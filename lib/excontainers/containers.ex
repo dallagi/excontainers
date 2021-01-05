@@ -14,7 +14,9 @@ defmodule Excontainers.Containers do
       cmd: opts[:cmd],
       exposed_ports: exposed_ports,
       wait_strategy: opts[:wait_strategy],
-      environment: opts[:environment] || %{}
+      environment: opts[:environment] || %{},
+      privileged: opts[:privileged],
+      bind_mounts: opts[:bind_mounts]
     }
   end
 

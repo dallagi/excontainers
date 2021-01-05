@@ -20,7 +20,7 @@ defmodule Excontainers.Container do
     {:ok, container_id}
   end
 
-  def stop(pid, opts) do
+  def stop(pid, opts \\ []) do
     container_id(pid)
     |> Containers.stop(opts)
   end
