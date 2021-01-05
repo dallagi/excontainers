@@ -14,7 +14,9 @@ defmodule Support.DockerTestUtils do
 
   defmacro run_a_container() do
     quote do
-      {stdout, _exit_code = 0} = System.cmd("docker", ["run", "-d", "--rm", unquote(@sample_image), "sleep", "infinity"])
+      {stdout, _exit_code = 0} =
+        System.cmd("docker", ["run", "-d", "--rm", unquote(@sample_image), "sleep", "infinity"])
+
       container_id = String.trim(stdout)
       on_exit(fn -> remove_container(container_id) end)
 
