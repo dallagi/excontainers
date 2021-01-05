@@ -124,8 +124,7 @@ defmodule Docker.ApiTest do
 
       :ok = Api.start_container(container_id)
 
-      {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-      assert running_containers_output =~ short_id(container_id)
+      assert container_running?(container_id)
     end
 
     test "returns error when container does not exist" do
@@ -138,16 +137,14 @@ defmodule Docker.ApiTest do
       container_id = run_a_container()
       :ok = Api.stop_container(container_id, timeout_seconds: 1)
 
-      {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-      refute running_containers_output =~ short_id(container_id)
+      refute container_running?(container_id)
     end
 
     test "returns :ok and does nothing if container was already stopped" do
       container_id = create_a_container()
       :ok = Api.stop_container(container_id)
 
-      {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-      refute running_containers_output =~ short_id(container_id)
+      refute container_running?(container_id)
     end
 
     test "returns error when container does not exist" do

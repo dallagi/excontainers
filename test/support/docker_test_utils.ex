@@ -24,6 +24,11 @@ defmodule Support.DockerTestUtils do
 
   def remove_container(id_or_name), do: System.cmd("docker", ["rm", "-f", id_or_name], stderr_to_stdout: true)
 
+  def container_running?(container_id) do
+    {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps", "-f", "id=#{container_id}"])
+    running_containers_output =~ short_id(container_id)
+  end
+
   def image_exists?(image_name) do
     {stdout, _exit_code = 0} = System.cmd("docker", ["images", "-q", image_name])
 

@@ -12,8 +12,7 @@ defmodule Excontainers.ContainerTest do
     {:ok, container_id} = Container.start(pid)
     on_exit(fn -> remove_container(container_id) end)
 
-    {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-    assert running_containers_output =~ short_id(container_id)
+    assert container_running?(container_id)
   end
 
   test "stops a container" do
@@ -22,8 +21,7 @@ defmodule Excontainers.ContainerTest do
 
     :ok = Container.stop(pid, timeout_seconds: 1)
 
-    {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-    refute running_containers_output =~ short_id(container_id)
+    refute container_running?(container_id)
   end
 
   test "stores the container config" do

@@ -10,7 +10,6 @@ defmodule Excontainers.ExUnit.SimpleTest do
   test "container is ran during tests", %{alpine: alpine} do
     container_id = Container.container_id(alpine)
 
-    {running_containers_output, _exit_code = 0} = System.cmd("docker", ["ps"])
-    assert running_containers_output =~ short_id(container_id)
+    assert container_running?(container_id)
   end
 end
