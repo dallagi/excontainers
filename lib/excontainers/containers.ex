@@ -15,8 +15,8 @@ defmodule Excontainers.Containers do
       exposed_ports: exposed_ports,
       wait_strategy: opts[:wait_strategy],
       environment: opts[:environment] || %{},
-      privileged: opts[:privileged],
-      bind_mounts: opts[:bind_mounts]
+      privileged: opts[:privileged] || false,
+      bind_mounts: opts[:bind_mounts] || []
     }
   end
 
@@ -51,7 +51,9 @@ defmodule Excontainers.Containers do
 
   def mapped_port(container, container_port) do
     container_port = set_protocol_to_tcp_if_not_specified(container_port)
-    info(container).mapped_ports[container_port]
+    info(container).mapped_ports
+    |> Map.get(container_port)
+    |> String.to_integer()
   end
 
   defp set_protocol_to_tcp_if_not_specified(port) when is_binary(port), do: port
