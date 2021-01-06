@@ -18,7 +18,7 @@ defmodule Excontainers.ImagesTest do
 
   # This test may fail by timing out (trying to download all tags)
   # Might as well reduce the waste of time when that happens
-  @tag timeout: 5_000
+  @tag timeout: 10_000
   test "when no tag is specified, downloads :latest image" do
     Excontainers.Images.pull("busybox")
 
