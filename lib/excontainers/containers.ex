@@ -51,6 +51,7 @@ defmodule Excontainers.Containers do
 
   def mapped_port(container, container_port) do
     container_port = set_protocol_to_tcp_if_not_specified(container_port)
+
     info(container).mapped_ports
     |> Map.get(container_port)
     |> String.to_integer()
