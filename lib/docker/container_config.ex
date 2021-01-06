@@ -9,7 +9,8 @@ defmodule Docker.ContainerConfig do
     exposed_ports: [],
     wait_strategy: nil,
     privileged: false,
-    bind_mounts: []
+    bind_mounts: [],
+    labels: %{}
   ]
 
   def with_environment(config, key, value) do
@@ -22,6 +23,10 @@ defmodule Docker.ContainerConfig do
 
   def with_bind_mount(config, host_src, container_dest, options \\ "ro") do
     new_bind_mount = %VolumeBinding{host_src: host_src, container_dest: container_dest, options: options}
-    %__MODULE__{config | bind_mounts: [ new_bind_mount | config.bind_mounts ]}
+    %__MODULE__{config | bind_mounts: [new_bind_mount | config.bind_mounts]}
   end
- end
+
+  def with_label(config, key, value) do
+    %__MODULE__{config | labels: Map.put(config.labels, key, value)}
+  end
+end

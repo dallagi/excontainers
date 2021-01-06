@@ -68,6 +68,7 @@ defmodule Docker.Container do
       Cmd: container_config.cmd,
       ExposedPorts: exposed_ports_config,
       Env: env_config,
+      Labels: container_config.labels,
       HostConfig: %{PortBindings: port_bindings_config, Privileged: container_config.privileged, Binds: volume_bindings}
     }
     |> remove_nil_values

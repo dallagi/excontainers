@@ -12,6 +12,8 @@ defmodule Docker.ContainerConfigTest do
       |> ContainerConfig.with_bind_mount("/another/host/src", "/another/container/dest")
       |> ContainerConfig.with_exposed_port(8080)
       |> ContainerConfig.with_exposed_port(8081)
+      |> ContainerConfig.with_label("key1", "val1")
+      |> ContainerConfig.with_label("key2", "val2")
 
     assert config == %Docker.ContainerConfig{
              bind_mounts: [
@@ -31,6 +33,7 @@ defmodule Docker.ContainerConfigTest do
              exposed_ports: [8081, 8080],
              image: "my-image",
              privileged: false,
+             labels: %{"key2" => "val2", "key1" => "val1"},
              wait_strategy: nil
            }
   end

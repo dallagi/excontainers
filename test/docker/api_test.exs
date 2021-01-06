@@ -44,14 +44,20 @@ defmodule Docker.ApiTest do
   describe "create_container/2" do
     test "creates a container with the specified config" do
       unique_container_name = "test_create_container_#{UUID.uuid4()}"
-      config = %ContainerConfig{image: @alpine, cmd: ["sleep", "infinity"]}
+
+      config = %ContainerConfig{
+        image: @alpine,
+        cmd: ["sleep", "infinity"],
+        labels: %{"test-label-key" => "test-label-value"}
+      }
+
       on_exit(fn -> remove_container(unique_container_name) end)
 
       {:ok, container_id} = Api.create_container(config, unique_container_name)
 
-      {all_containers_output, _exit_code = 0} = System.cmd("docker", ["ps", "-a"])
-      assert all_containers_output =~ unique_container_name
-      assert all_containers_output =~ short_id(container_id)
+      {container_info, _exit_code = 0} = System.cmd("docker", ~w(ps -a -f label=test-label-key=test-label-value))
+      assert container_info =~ unique_container_name
+      assert container_info =~ short_id(container_id)
     end
 
     test "supports mapping ports on the container to random ports on the host" do
