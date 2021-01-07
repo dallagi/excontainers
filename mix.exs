@@ -21,6 +21,10 @@ defmodule Excontainers.MixProject do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test
+      ],
+      docs: [
+        main: "README",
+        extras: ["README.md"]
       ]
     ]
   end
