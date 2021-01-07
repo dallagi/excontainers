@@ -2,6 +2,7 @@
 
 ![CircleCI](https://img.shields.io/circleci/build/github/dallagi/excontainers/master)
 ![Coveralls github](https://img.shields.io/coveralls/github/dallagi/excontainers)
+![Hex.pm](https://img.shields.io/hexpm/v/excontainers)
 
 Throwaway test containers for Elixir/Erlang applications.
 Heavily inspired by [Testcontainers](https://www.testcontainers.org/).
