@@ -5,7 +5,7 @@ defmodule Excontainers.Images do
     |> Docker.Api.pull_image()
   end
 
-  def with_latest_tag_by_default(name) do
+  defp with_latest_tag_by_default(name) do
     case String.contains?(name, ":") do
       true -> name
       false -> "#{name}:latest"
