@@ -34,4 +34,4 @@ jobs:
             mix local.rebar --force
 
       - run: mix deps.get
-      - run: mix test --trace
+      - run: mix coveralls.post --trace -t $COVERALLS_REPO_TOKEN

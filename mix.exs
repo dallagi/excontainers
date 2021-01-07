@@ -14,6 +14,13 @@ defmodule Excontainers.MixProject do
       package: [
         links: %{"GitHub" => "https://github.com/dallagi/excontainers"},
         licenses: ["GPL-3.0-or-later"]
+      ],
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
       ]
     ]
   end
@@ -35,6 +42,8 @@ defmodule Excontainers.MixProject do
       {:jason, ">= 1.0.0"},
       {:tesla, "~> 1.4.0"},
       {:gestalt, "~> 1.0"},
+
+      {:excoveralls, "~> 0.13", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:elixir_uuid, "~> 1.2", only: [:dev, :test]},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
