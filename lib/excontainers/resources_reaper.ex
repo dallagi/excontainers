@@ -62,7 +62,7 @@ defmodule Excontainers.ResourcesReaper do
     opts = [:binary, active: false, packet: :line]
     ryuk_port = Container.mapped_port(ryuk_pid, @ryuk_port)
 
-    :gen_tcp.connect({127, 0, 0, 1}, ryuk_port, opts)
+    :gen_tcp.connect('localhost', ryuk_port, opts)
   end
 
   defp filter(key, value), do: "#{url_encode(key)}=#{url_encode(value)}"
