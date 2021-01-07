@@ -1,5 +1,7 @@
 # Excontainers
 
+[![dallagi](https://circleci.com/gh/dallagi/excontainers.svg?style=svg)](https://app.circleci.com/pipelines/github/dallagi/excontainers)
+
 Throwaway test containers for Elixir/Erlang applications.
 Heavily inspired by [Testcontainers](https://www.testcontainers.org/).
 
