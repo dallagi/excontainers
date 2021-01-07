@@ -1,7 +1,7 @@
 # Excontainers
 
-[![dallagi](https://circleci.com/gh/dallagi/excontainers.svg?style=svg)](https://app.circleci.com/pipelines/github/dallagi/excontainers)
-[![Coverage Status](https://coveralls.io/repos/github/dallagi/excontainers/badge.svg?branch=master)](https://coveralls.io/github/dallagi/excontainers?branch=master)
+![CircleCI](https://img.shields.io/circleci/build/github/dallagi/excontainers/master)
+![Coveralls github](https://img.shields.io/coveralls/github/dallagi/excontainers)
 
 Throwaway test containers for Elixir/Erlang applications.
 Heavily inspired by [Testcontainers](https://www.testcontainers.org/).
