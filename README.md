@@ -44,6 +44,9 @@ defmodule Excontainers.RedisContainerTest do
 end
 ```
 
+Containers declared using the `container` helper are created for each test.
+Alternatively, you can use `shared_container` to declare containers that are created once per each module and shared among its tests.
+
 ### Direct usage
 
 If you want to use Excontainers outside of your Exunit tests,
