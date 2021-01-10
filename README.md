@@ -89,6 +89,18 @@ custom_container_config = Excontainers.Containers.new(
 )
 ```
 
+A builder-like API to customize container configuration is also provided:
+
+``` elixir
+alias Excontainers.Container
+
+custom_container_config =
+  Container.new("alpine", cmd: ~w("echo hello world!"), privileged: false)
+  |> Container.with_environment("SOME_KEY", "SOME_VAL")
+  |> Container.with_exposed_port(8080)
+  |> Container.with_bind_mount("host/src", "container/dest", "ro")
+```
+
 ### Resources Reaping
 
 Under normal circumstances, Excontainers removes the containers it spawned after they are no longer useful (i.e., during the teardown phase of tests).
