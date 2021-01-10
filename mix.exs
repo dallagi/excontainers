@@ -6,7 +6,7 @@ defmodule Excontainers.MixProject do
       app: :excontainers,
       description: "Throwaway containers for your tests",
       source_url: "https://github.com/dallagi/excontainers",
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -46,7 +46,6 @@ defmodule Excontainers.MixProject do
       {:jason, ">= 1.0.0"},
       {:tesla, "~> 1.4.0"},
       {:gestalt, "~> 1.0"},
-
       {:excoveralls, "~> 0.13", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:elixir_uuid, "~> 1.2", only: [:dev, :test]},
