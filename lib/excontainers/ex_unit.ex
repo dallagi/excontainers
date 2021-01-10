@@ -1,5 +1,5 @@
 defmodule Excontainers.ExUnit do
-  alias Excontainers.{Container, Containers}
+  alias Excontainers.{Container, Containers, ResourcesReaper}
 
   defmacro container(name, config) do
     quote do
@@ -23,6 +23,7 @@ defmodule Excontainers.ExUnit do
       {:ok, container_id} = pid |> Container.start()
 
       on_exit(fn -> Containers.stop(container_id, timeout_seconds: 2) end)
+      ResourcesReaper.register({"id", container_id})
 
       {:ok, %{unquote(name) => pid}}
     end
