@@ -21,6 +21,12 @@ defmodule Excontainers.ResourcesReaper do
 
   defstruct [:ryuk_pid, :socket]
 
+  # CLIENT
+
+  def start_link(name \\ __MODULE__), do: GenServer.start_link(__MODULE__, nil, name: name)
+
+  def register(pid_or_name \\ __MODULE__, filter), do: GenServer.cast(pid_or_name, {:register, filter})
+
   # CALLBACKS
 
   @impl true
@@ -44,16 +50,8 @@ defmodule Excontainers.ResourcesReaper do
     :gen_tcp.close(state.socket)
   end
 
-  # CLIENT
-
-  def start_link(name \\ __MODULE__), do: GenServer.start_link(__MODULE__, nil, name: name)
-
-  def register(pid_or_name \\ __MODULE__, filter), do: GenServer.cast(pid_or_name, {:register, filter})
-
-  # PRIVATE FUNCTIONS
-
   defp do_register(socket, {filter_key, filter_value}) do
-    :gen_tcp.send(socket, filter(filter_key, filter_value) <> "\n")
+    :gen_tcp.send(socket, docker_filter(filter_key, filter_value) <> "\n")
     wait_for_ack(socket)
     :ok
   end
@@ -65,18 +63,16 @@ defmodule Excontainers.ResourcesReaper do
     :gen_tcp.connect('localhost', ryuk_port, opts)
   end
 
-  defp filter(key, value), do: "#{url_encode(key)}=#{url_encode(value)}"
-
-  defp url_encode(string), do: :http_uri.encode(string)
-
-  defp wait_for_ack(socket) do
-    {:ok, "ACK\n"} = :gen_tcp.recv(socket, 0, 1_000)
-  end
-
   defp start_ryuk do
     {:ok, ryuk_pid} = Container.start_link(@ryuk)
     Container.start(ryuk_pid)
 
     {:ok, ryuk_pid}
   end
+
+  defp docker_filter(key, value), do: "#{url_encode(key)}=#{url_encode(value)}"
+
+  defp url_encode(string), do: :http_uri.encode(string)
+
+  defp wait_for_ack(socket), do: {:ok, "ACK\n"} = :gen_tcp.recv(socket, 0, 1_000)
 end
