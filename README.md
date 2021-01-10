@@ -84,6 +84,19 @@ custom_image = Excontainers.Containers.new(
 )
 ```
 
+### Resources Reaping
+
+Under normal circumstances, Excontainers removes the containers it spawned after they are no longer useful (i.e., during the teardown phase of tests).
+However, it may fail to do so when tests are interrupted abruptly, preventing ExUnit from running the necessary callbacks.
+
+Excontainers provides a _Resources Reaper_ that makes sure containers are removed when they are no longer useful.
+It runs in its own docker container, so it is not affected by crashes or problems with the tests suite.
+
+To enable the _Resources Reaper_, simply spawn it before you run your tests, e.g., by adding this to your `tests_helper.exs`:
+
+``` elixir
+Excontainers.ResourcesReaper.start_link()
+```
 
 ## Development
 
