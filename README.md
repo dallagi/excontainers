@@ -44,6 +44,17 @@ defmodule Excontainers.RedisContainerTest do
 end
 ```
 
+### Direct usage
+
+If you want to use Excontainers outside of your Exunit tests,
+or if you'd like to have direct control over the lifecycle of your containers,
+you can use the `Excontainers.Container` agent:
+
+```elixir
+{:ok, pid} = Container.start_link(@sample_container_config)
+{:ok, container_id} = Container.start(pid)
+```
+
 ### Pre-configured containers
 
 The following pre-configured containers are currently provided:
@@ -56,21 +67,21 @@ Please open an issue if you'd like to see new ones.
 ### Custom containers
 
 **Excontainers** can run any container that docker can.
-Container configuration is specified via the `Docker.ContainerConfig` struct.
+Custom container configurations can be built via `Excontainers.Containers.new`.
 
 For example:
 
 ```elixir
-custom_image = %Docker.ContainerConfig{
-  image: @alpine,
-  cmd: ["sleep", "3"],
+custom_image = Excontainers.Containers.new(
+  "alpine"
+  cmd: ~w(echo hello world!),
   labels: %{"test-label-key" => "test-label-value"},
   privileged: false,
   environment: %{"SOME_KEY" => "SOME_VAL"},
   exposed_ports: [8080],
-  bind_mounts: %Docker.VolumeBinding{container_dest: "/container/dest", host_src: "host/src", options: "ro"},
-  wait_strategy: %Excontainers.CommandWaitStrategy{command: ["is_ready"]}
-}
+  bind_mounts: [%Docker.VolumeBinding{container_dest: "/container/dest", host_src: "host/src", options: "ro"}],
+  wait_strategy: Excontainers.CommandWaitStrategy.new(["./command/to/check/if/container/is/ready.sh"])
+)
 ```
 
 
