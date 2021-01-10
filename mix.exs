@@ -23,7 +23,7 @@ defmodule Excontainers.MixProject do
         "coveralls.html": :test
       ],
       docs: [
-        main: "README",
+        main: "readme",
         extras: ["README.md"]
       ]
     ]
