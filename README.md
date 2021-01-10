@@ -58,6 +58,7 @@ you can use the `Excontainers.Container` agent:
 ```elixir
 {:ok, pid} = Container.start_link(@sample_container_config)
 {:ok, container_id} = Container.start(pid)
+:ok = Container.stop(pid)
 ```
 
 ### Containers
@@ -123,7 +124,7 @@ When controlling the lifecycle of containers manually, containers can be registe
 Excontainers.ResourcesReaper.register({"id", my_container_id})
 ```
 
-`{"id", my_container_id}` is a filter for docker resources that works on the id of the container.
+`{"id", my_container_id}` is a [filter for docker resources](https://docs.docker.com/engine/reference/commandline/ps/#filtering) that works on the id of the container.
 Other attributes (e.g., `label`s) could also be used.
 
 ## Development
