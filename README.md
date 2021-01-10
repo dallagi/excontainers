@@ -25,6 +25,8 @@ Documentation can be found at [https://hexdocs.pm/excontainers](https://hexdocs.
 
 ## Usage
 
+#### ExUnit
+
 Create a throwaway container (in this case Redis) within a ExUnit test:
 
 ``` elixir
@@ -47,7 +49,7 @@ end
 Containers declared using the `container` helper are created for each test.
 Alternatively, you can use `shared_container` to declare containers that are created once per each module and shared among its tests.
 
-### Direct usage
+#### Direct usage
 
 If you want to use Excontainers outside of your Exunit tests,
 or if you'd like to have direct control over the lifecycle of your containers,
@@ -58,24 +60,24 @@ you can use the `Excontainers.Container` agent:
 {:ok, container_id} = Container.start(pid)
 ```
 
-### Pre-configured containers
+### Containers
 
-The following pre-configured containers are currently provided:
+The following containers are currently provided pre-configured:
 
 * `Excontainers.PostgresContainer`
 * `Excontainers.RedisContainer`
 
 Please open an issue if you'd like to see new ones.
 
-### Custom containers
+#### Custom containers
 
-**Excontainers** can run any container that docker can.
+Excontainers can run any container that docker can.
 Custom container configurations can be built via `Excontainers.Containers.new`.
 
 For example:
 
 ```elixir
-custom_image = Excontainers.Containers.new(
+custom_container_config = Excontainers.Containers.new(
   "alpine"
   cmd: ~w(echo hello world!),
   labels: %{"test-label-key" => "test-label-value"},
@@ -100,6 +102,17 @@ To enable the _Resources Reaper_, simply spawn it before you run your tests, e.g
 ``` elixir
 Excontainers.ResourcesReaper.start_link()
 ```
+
+Containers managed via the `container` and `shared_container` helpers for ExUnit are automatically registered to the _Resources Reaper_.
+
+When controlling the lifecycle of containers manually, containers can be registered to the _Resources Reaper_ like this:
+
+``` elixir
+Excontainers.ResourcesReaper.register({"id", my_container_id})
+```
+
+`{"id", my_container_id}` is a filter for docker resources that works on the id of the container.
+Other attributes (e.g., `label`s) could also be used.
 
 ## Development
 
