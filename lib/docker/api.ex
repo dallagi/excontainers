@@ -19,6 +19,8 @@ defmodule Docker.Api do
     end
   end
 
+  defdelegate run_container(container_config, name \\ nil), to: Container, as: :run
+
   defdelegate create_container(container_config, name \\ nil), to: Container, as: :create
 
   defdelegate start_container(container_id), to: Container, as: :start
@@ -28,7 +30,8 @@ defmodule Docker.Api do
   defdelegate exec_and_wait(container_id, command), to: Docker.Exec, as: :exec_and_wait
 
   def pull_image(name) do
-    image_name = name
+    image_name =
+      name
       |> with_latest_tag_by_default()
 
     case Tesla.post(Client.plain_text(), "/images/create", "",

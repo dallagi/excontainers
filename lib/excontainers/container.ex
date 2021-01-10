@@ -15,7 +15,7 @@ defmodule Excontainers.Container do
   end
 
   def start(pid) do
-    {:ok, container_id} = Containers.start(config(pid))
+    {:ok, container_id} = Docker.Api.run_container(config(pid))
     set_container_id(pid, container_id)
     {:ok, container_id}
   end

@@ -2,6 +2,7 @@ defmodule Docker.ApiTest do
   use ExUnit.Case, async: true
 
   alias Docker.{Api, ContainerConfig, ContainerState, BindMount}
+  alias Excontainers.CommandWaitStrategy
   import Support.DockerTestUtils
 
   @alpine "alpine:20201218"
@@ -162,7 +163,7 @@ defmodule Docker.ApiTest do
     @image_that_no_one_should_be_using "busybox:1.24.2-uclibc"
 
     setup do
-	    remove_image(@image_that_no_one_should_be_using)
+      remove_image(@image_that_no_one_should_be_using)
       :ok
     end
 
@@ -186,6 +187,47 @@ defmodule Docker.ApiTest do
 
     test "returns error when image does not exist" do
       assert {:error, _} = Api.stop_container("unexisting-image-#{UUID.uuid4()}")
+    end
+  end
+
+  describe "run_container/2" do
+    test "creates and starts a container with the given config" do
+      container_config = %ContainerConfig{image: @alpine, cmd: ["sleep", "infinity"]}
+
+      {:ok, container_id} = Api.run_container(container_config)
+      on_exit(fn -> remove_container(container_id) end)
+
+      assert container_running?(container_id)
+    end
+
+    test "waits for container to be ready according to the wait strategy" do
+      container_config = %ContainerConfig{
+        image: @alpine,
+        cmd: ["sh", "-c", "sleep 1 && touch /root/.ready && sleep infinity"],
+        wait_strategy: CommandWaitStrategy.new(["ls", "/root/.ready"])
+      }
+
+      {:ok, container_id} = Api.run_container(container_config)
+      on_exit(fn -> remove_container(container_id) end)
+
+      assert {_stdout, _exit_code = 0} = System.cmd("docker", ["exec", container_id, "ls", "/root/.ready"])
+    end
+
+    test "when image does not exist, automatically fetches it before starting the container" do
+      image_that_no_one_should_be_using = "busybox:1.24.1-uclibc"
+
+      container_config = %ContainerConfig{
+        image: image_that_no_one_should_be_using,
+        cmd: ["sleep", "infinity"]
+      }
+
+      remove_image(image_that_no_one_should_be_using)
+      refute image_exists?(image_that_no_one_should_be_using)
+
+      {:ok, container_id} = Api.run_container(container_config)
+      on_exit(fn -> remove_container(container_id) end)
+
+      assert image_exists?(image_that_no_one_should_be_using)
     end
   end
 end

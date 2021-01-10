@@ -1,5 +1,6 @@
 defmodule Docker.Container do
   alias Docker.Client
+  alias Excontainers.WaitStrategy
 
   def create(container_config, name \\ nil) do
     data = container_create_payload(container_config)
@@ -20,6 +21,20 @@ defmodule Docker.Container do
       {:ok, %{status: 204}} -> :ok
       {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
+    end
+  end
+
+  def run(container_config, name \\ nil) do
+    case create(container_config, name) do
+      {:ok, container_id} ->
+        start_and_wait(container_id, container_config)
+
+      {:error, {:http_error, 404}} ->
+        Docker.Api.pull_image(container_config.image)
+        run(container_config)
+
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 
@@ -74,7 +89,17 @@ defmodule Docker.Container do
     |> remove_nil_values
   end
 
-  def remove_nil_values(map) do
+  defp start_and_wait(container_id, container_config) do
+    :ok = start(container_id)
+
+    if container_config.wait_strategy do
+      :ok = WaitStrategy.wait_until_container_is_ready(container_config.wait_strategy, container_id)
+    end
+
+    {:ok, container_id}
+  end
+
+  defp remove_nil_values(map) do
     map
     |> Enum.filter(fn {_, v} -> v != nil end)
     |> Enum.into(%{})
