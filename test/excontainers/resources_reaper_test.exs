@@ -4,17 +4,19 @@ defmodule Excontainers.ResourcesReaperTest do
   alias Excontainers.{Containers, ResourcesReaper}
   import Support.DockerTestUtils
 
-  @unique_name __MODULE__
   @sample_container Containers.new("alpine", cmd: ~w(sleep infinity))
   @expected_timeout_seconds 10
 
   test "when it terminates, reaps all registered resources after a timeout" do
-    ResourcesReaper.start_link(@unique_name)
+    {:ok, resources_reaper_pid} = ResourcesReaper.start_link()
     {:ok, container_id} = Containers.start(@sample_container)
-    ResourcesReaper.register(@unique_name, {"id", container_id})
+
+    resources_reaper_pid
+    |> ResourcesReaper.register({"id", container_id})
+
     assert container_exists?(container_id)
 
-    Process.whereis(@unique_name)
+    resources_reaper_pid
     |> Process.exit(:normal)
 
     wait_for_timeout()

@@ -23,9 +23,11 @@ defmodule Excontainers.ResourcesReaper do
 
   # CLIENT
 
-  def start_link(name \\ __MODULE__), do: GenServer.start_link(__MODULE__, nil, name: name)
+  def start_link(options \\ []) do
+    GenServer.start_link(__MODULE__, nil, name: Keyword.get(options, :name, __MODULE__))
+  end
 
-  def register(pid_or_name \\ __MODULE__, filter), do: GenServer.cast(pid_or_name, {:register, filter})
+  def register(pid \\ __MODULE__, filter), do: GenServer.cast(pid, {:register, filter})
 
   # CALLBACKS
 
