@@ -13,4 +13,17 @@ defmodule Excontainers.ExUnit do
       end
     end
   end
+
+  defmacro shared_container(name, config) do
+    quote do
+      setup_all do
+        {:ok, pid} = Container.start_link(unquote(config))
+        {:ok, container_id} = pid |> Container.start()
+
+        on_exit(fn -> Containers.stop(container_id, timeout_seconds: 2) end)
+
+        {:ok, %{unquote(name) => pid}}
+      end
+    end
+  end
 end
