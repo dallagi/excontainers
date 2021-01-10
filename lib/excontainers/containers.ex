@@ -2,7 +2,7 @@ defmodule Excontainers.Containers do
   @moduledoc """
   High-level functions to interact with Docker.
   """
-  alias Excontainers.{Images, WaitStrategy}
+  alias Excontainers.WaitStrategy
 
   def new(image, opts \\ []) do
     exposed_ports =
@@ -26,17 +26,32 @@ defmodule Excontainers.Containers do
         do_start(container_id, container_config)
 
       {:error, {:http_error, 404}} ->
-        Images.pull(container_config.image)
+        Docker.Api.pull_image(container_config.image)
         start(container_config)
+
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 
   def stop(container_id, opts \\ []), do: Docker.Api.stop_container(container_id, opts)
 
-  def info(container_id) do
-    {:ok, container_info} = Docker.Api.inspect_container(container_id)
+  def info(container_id), do: Docker.Api.inspect_container(container_id)
 
-    container_info
+  def mapped_port(container, container_port) do
+    container_port =
+      container_port
+      |> set_protocol_to_tcp_if_not_specified
+
+    case info(container) do
+      {:ok, info} ->
+        info.mapped_ports
+        |> Map.get(container_port)
+        |> String.to_integer()
+
+      {:error, message} ->
+        {:error, message}
+    end
   end
 
   defp do_start(container_id, container_config) do
@@ -47,14 +62,6 @@ defmodule Excontainers.Containers do
     end
 
     {:ok, container_id}
-  end
-
-  def mapped_port(container, container_port) do
-    container_port = set_protocol_to_tcp_if_not_specified(container_port)
-
-    info(container).mapped_ports
-    |> Map.get(container_port)
-    |> String.to_integer()
   end
 
   defp set_protocol_to_tcp_if_not_specified(port) when is_binary(port), do: port

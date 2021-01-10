@@ -28,13 +28,23 @@ defmodule Docker.Api do
   defdelegate exec_and_wait(container_id, command), to: Docker.Exec, as: :exec_and_wait
 
   def pull_image(name) do
+    image_name = name
+      |> with_latest_tag_by_default()
+
     case Tesla.post(Client.plain_text(), "/images/create", "",
-           query: %{fromImage: name},
+           query: %{fromImage: image_name},
            opts: [adapter: [recv_timeout: @one_minute]]
          ) do
       {:ok, %{status: 200}} -> :ok
       {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
+    end
+  end
+
+  defp with_latest_tag_by_default(name) do
+    case String.contains?(name, ":") do
+      true -> name
+      false -> "#{name}:latest"
     end
   end
 end

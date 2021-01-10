@@ -159,15 +159,29 @@ defmodule Docker.ApiTest do
   end
 
   describe "pull_image/1" do
+    @image_that_no_one_should_be_using "busybox:1.24.2-uclibc"
+
+    setup do
+	    remove_image(@image_that_no_one_should_be_using)
+      :ok
+    end
+
     test "pulls the image if it does not exist" do
-      image_that_no_one_should_be_using = "busybox:1.24.2-uclibc"
-      remove_image(image_that_no_one_should_be_using)
+      refute image_exists?(@image_that_no_one_should_be_using)
 
-      refute image_exists?(image_that_no_one_should_be_using)
+      :ok = Api.pull_image(@image_that_no_one_should_be_using)
 
-      :ok = Api.pull_image(image_that_no_one_should_be_using)
+      assert image_exists?(@image_that_no_one_should_be_using)
+    end
 
-      assert image_exists?(image_that_no_one_should_be_using)
+    # This test may fail by timing out (trying to download all tags)
+    # Might as well reduce the waste of time when that happens
+    @tag timeout: 10_000
+    test "when no tag is specified, downloads :latest image" do
+      Api.pull_image("busybox")
+
+      assert image_exists?("busybox:latest")
+      refute image_exists?(@image_that_no_one_should_be_using)
     end
 
     test "returns error when image does not exist" do
