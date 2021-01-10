@@ -5,7 +5,7 @@ defmodule Excontainers.ExUnit.TestsIsolationTest do
   import ExUnit.CaptureIO
 
   test "containers are re-created for each test" do
-    defmodule SampleTest do
+    defmodule SampleTestWithIsolatedContainers do
       use ExUnit.Case
       import Excontainers.ExUnit
       alias Excontainers.{Container, Containers}
@@ -32,7 +32,7 @@ defmodule Excontainers.ExUnit.TestsIsolationTest do
   end
 
   test "shared containers are created once for the whole module and then shared by tests" do
-    defmodule SampleTest do
+    defmodule SampleTestWithSharedContainers do
       use ExUnit.Case
       import Excontainers.ExUnit
       alias Excontainers.{Container, Containers}
