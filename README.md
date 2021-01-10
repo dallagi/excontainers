@@ -79,7 +79,7 @@ custom_image = Excontainers.Containers.new(
   privileged: false,
   environment: %{"SOME_KEY" => "SOME_VAL"},
   exposed_ports: [8080],
-  bind_mounts: [%Docker.VolumeBinding{container_dest: "/container/dest", host_src: "host/src", options: "ro"}],
+  bind_mounts: [Docker.BindMount.new("host/src", "container/dest/", "ro")],
   wait_strategy: Excontainers.CommandWaitStrategy.new(["./command/to/check/if/container/is/ready.sh"])
 )
 ```

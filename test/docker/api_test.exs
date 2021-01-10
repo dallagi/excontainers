@@ -1,7 +1,7 @@
 defmodule Docker.ApiTest do
   use ExUnit.Case, async: true
 
-  alias Docker.{Api, ContainerConfig, ContainerState, VolumeBinding}
+  alias Docker.{Api, ContainerConfig, ContainerState, BindMount}
   import Support.DockerTestUtils
 
   @alpine "alpine:20201218"
@@ -106,7 +106,7 @@ defmodule Docker.ApiTest do
       config = %ContainerConfig{
         image: @alpine,
         cmd: ["sleep", "infinity"],
-        bind_mounts: [%VolumeBinding{host_src: Path.expand("mix.exs"), container_dest: "/root/mix.exs"}]
+        bind_mounts: [%BindMount{host_src: Path.expand("mix.exs"), container_dest: "/root/mix.exs"}]
       }
 
       {:ok, container_id} = Api.create_container(config)

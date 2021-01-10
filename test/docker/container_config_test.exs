@@ -17,12 +17,12 @@ defmodule Docker.ContainerConfigTest do
 
     assert config == %Docker.ContainerConfig{
              bind_mounts: [
-               %Docker.VolumeBinding{
+               %Docker.BindMount{
                  container_dest: "/another/container/dest",
                  host_src: "/another/host/src",
                  options: "ro"
                },
-               %Docker.VolumeBinding{
+               %Docker.BindMount{
                  container_dest: "/container/dest",
                  host_src: "/host/src",
                  options: "ro"

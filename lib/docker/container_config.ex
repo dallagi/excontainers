@@ -1,5 +1,5 @@
 defmodule Docker.ContainerConfig do
-  alias Docker.VolumeBinding
+  alias Docker.BindMount
 
   @enforce_keys [:image]
   defstruct [
@@ -22,7 +22,7 @@ defmodule Docker.ContainerConfig do
   end
 
   def with_bind_mount(config, host_src, container_dest, options \\ "ro") do
-    new_bind_mount = %VolumeBinding{host_src: host_src, container_dest: container_dest, options: options}
+    new_bind_mount = %BindMount{host_src: host_src, container_dest: container_dest, options: options}
     %__MODULE__{config | bind_mounts: [new_bind_mount | config.bind_mounts]}
   end
 

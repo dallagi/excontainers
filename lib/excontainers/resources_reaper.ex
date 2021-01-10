@@ -6,7 +6,7 @@ defmodule Excontainers.ResourcesReaper do
 
   use GenServer
 
-  alias Docker.VolumeBinding
+  alias Docker.BindMount
   alias Excontainers.{Container, Containers}
 
   @ryuk_port 8080
@@ -15,7 +15,7 @@ defmodule Excontainers.ResourcesReaper do
           exposed_ports: [@ryuk_port],
           privileged: true,
           bind_mounts: [
-            %VolumeBinding{host_src: "/var/run/docker.sock", container_dest: "/var/run/docker.sock", options: "rw"}
+            %BindMount{host_src: "/var/run/docker.sock", container_dest: "/var/run/docker.sock", options: "rw"}
           ]
         )
 

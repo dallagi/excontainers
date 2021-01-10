@@ -14,7 +14,9 @@ defmodule Excontainers.ResourcesReaperTest do
     ResourcesReaper.register(@unique_name, {"id", container_id})
     assert container_exists?(container_id)
 
-    Process.exit(Process.whereis(@unique_name), :normal)
+    Process.whereis(@unique_name)
+    |> Process.exit(:normal)
+
     wait_for_timeout()
 
     refute container_exists?(container_id)
