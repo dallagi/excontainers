@@ -4,7 +4,7 @@ defmodule Excontainers.RedisContainer do
   @redis_port 6379
   @wait_strategy CommandWaitStrategy.new(["redis-cli", "PING"])
 
-  def new(image \\ "redis:6.0-alpine", opts \\ []) do
+  def new(image \\ "redis:6.0-alpine", _opts \\ []) do
     Containers.new(
       image,
       exposed_ports: [@redis_port],

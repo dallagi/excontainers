@@ -1,47 +1,37 @@
 defmodule Docker.Api do
-  alias Docker.{Client, Container, ContainerState}
+  alias __MODULE__
+  alias Docker.Container
 
-  @one_minute 60_000
+  defdelegate ping(), to: Api.Operation, as: :ping
 
-  def ping() do
-    case Client.get("/_ping") do
-      {:ok, %{status: 200}} -> :ok
-      {:ok, %{status: status}} -> {:error, {:http_error, status}}
-      {:error, message} -> {:error, message}
-    end
-  end
+  defdelegate inspect_container(container_id), to: Api.Container, as: :inspect
 
-  def inspect_container(container_id) do
-    case Client.get("/containers/#{container_id}/json") do
-      {:ok, %{status: 200, body: body}} -> {:ok, ContainerState.parse_docker_response(body)}
-      {:ok, %{status: status}} -> {:error, {:http_error, status}}
-      {:error, message} -> {:error, message}
-    end
-  end
+  defdelegate create_container(container_config, name \\ nil), to: Api.Container, as: :create
+
+  defdelegate start_container(container_id), to: Api.Container, as: :start
+
+  defdelegate stop_container(container_id, options \\ []), to: Api.Container, as: :stop
+
+  defdelegate start_exec(exec_id), to: Api.Exec, as: :start
+
+  defdelegate create_exec(container_id, command), to: Api.Exec, as: :create
+
+  defdelegate inspect_exec(exec_id), to: Api.Exec, as: :inspect
+
+
+
+  # Part still to extract from Docker.Api
+
+  defdelegate exec_and_wait(container_id, command, options \\ []), to: Docker.Exec, as: :exec_and_wait
 
   defdelegate run_container(container_config, name \\ nil), to: Container, as: :run
-
-  defdelegate create_container(container_config, name \\ nil), to: Container, as: :create
-
-  defdelegate start_container(container_id), to: Container, as: :start
-
-  defdelegate stop_container(container_id, options \\ []), to: Container, as: :stop
-
-  defdelegate exec_and_wait(container_id, command), to: Docker.Exec, as: :exec_and_wait
 
   def pull_image(name) do
     image_name =
       name
       |> with_latest_tag_by_default()
 
-    case Tesla.post(Client.plain_text(), "/images/create", "",
-           query: %{fromImage: image_name},
-           opts: [adapter: [recv_timeout: @one_minute]]
-         ) do
-      {:ok, %{status: 200}} -> :ok
-      {:ok, %{status: status}} -> {:error, {:http_error, status}}
-      {:error, message} -> {:error, message}
-    end
+    Docker.Api.Image.pull(image_name)
   end
 
   defp with_latest_tag_by_default(name) do

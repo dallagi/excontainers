@@ -8,7 +8,7 @@ defmodule Docker.ExecTest do
       container_id = run_a_container()
       assert {:ok, exec_id} = Docker.Exec.exec(container_id, ["sleep", "1"])
 
-      {:ok, exec_status} = Docker.Exec.inspect_exec(exec_id)
+      {:ok, exec_status} = Docker.Api.Exec.inspect(exec_id)
       assert exec_status.running
     end
   end

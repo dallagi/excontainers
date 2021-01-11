@@ -1,4 +1,4 @@
-defmodule Docker.Client do
+defmodule Docker.Api.Client do
   use Tesla
 
   alias Docker.{DockerHost, HackneyHost}
