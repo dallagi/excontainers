@@ -1,7 +1,7 @@
-defmodule Docker.HackneyHostTest do
+defmodule Docker.Api.HackneyHostTest do
   use ExUnit.Case, async: true
 
-  alias Docker.HackneyHost
+  alias Docker.Api.HackneyHost
 
   test "tcp docker hosts are converted to http hosts for hackney" do
     assert HackneyHost.from_docker_host("tcp://my-host:1234") == "http://my-host:1234"

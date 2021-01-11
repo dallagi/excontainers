@@ -1,7 +1,7 @@
 defmodule Docker.Api.Client do
   use Tesla
 
-  alias Docker.{DockerHost, HackneyHost}
+  alias Docker.Api.{DockerHost, HackneyHost}
 
   @api_version "v1.41"
 

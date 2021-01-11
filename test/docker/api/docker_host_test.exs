@@ -1,7 +1,7 @@
 defmodule Docker.DockerHostTest do
   use ExUnit.Case, async: true
 
-  alias Docker.DockerHost
+  alias Docker.Api.DockerHost
 
   test "detect/0 defaults to the default unix socket" do
     assert DockerHost.detect() == "unix:///var/run/docker.sock"
