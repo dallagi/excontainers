@@ -12,10 +12,12 @@ defmodule Support.DockerTestUtils do
     end
   end
 
-  defmacro run_a_container() do
+  defmacro run_a_container(image \\ @sample_image, command \\ ["sleep", "infinity"], exposed_port \\ nil) do
     quote do
+      port_options = if unquote(exposed_port), do: ["-p", unquote(exposed_port)], else: []
+
       {stdout, _exit_code = 0} =
-        System.cmd("docker", ["run", "-d", "--rm", unquote(@sample_image), "sleep", "infinity"])
+        System.cmd("docker", ["run"] ++ port_options ++ ["-d", "--rm", unquote(image)] ++ unquote(command))
 
       container_id = String.trim(stdout)
       on_exit(fn -> remove_container(container_id) end)

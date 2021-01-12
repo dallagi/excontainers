@@ -31,7 +31,7 @@ defmodule Excontainers.Container do
 
   def container_id(pid), do: Agent.get(pid, & &1.container_id)
 
-  def mapped_port(pid, port), do: Containers.mapped_port(container_id(pid), port)
+  def mapped_port(pid, port), do: Docker.Container.mapped_port(container_id(pid), port)
 
   defp set_container_id(pid, container_id) do
     Agent.update(pid, fn container ->

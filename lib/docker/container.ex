@@ -19,6 +19,27 @@ defmodule Docker.Container do
     Docker.Api.stop_container(container_id, options)
   end
 
+  def info(container_id), do: Docker.Api.inspect_container(container_id)
+
+  def mapped_port(container, container_port) do
+    container_port =
+      container_port
+      |> set_protocol_to_tcp_if_not_specified
+
+    case info(container) do
+      {:ok, info} ->
+        info.mapped_ports
+        |> Map.get(container_port)
+        |> String.to_integer()
+
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  defp set_protocol_to_tcp_if_not_specified(port) when is_binary(port), do: port
+  defp set_protocol_to_tcp_if_not_specified(port) when is_integer(port), do: "#{port}/tcp"
+
   defp start_and_wait(container_id, container_config) do
     :ok = Docker.Api.start_container(container_id)
 
