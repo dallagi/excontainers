@@ -1,4 +1,4 @@
-defmodule Docker.Api.Image do
+defmodule Docker.Api.Images do
   alias Docker.Api.Client
 
   @one_minute 60_000

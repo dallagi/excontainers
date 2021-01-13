@@ -23,19 +23,4 @@ defmodule Docker.Api do
   defdelegate exec_and_wait(container_id, command, options \\ []), to: Docker.Exec, as: :exec_and_wait
 
   defdelegate run_container(container_config, name \\ nil), to: Container, as: :run
-
-  def pull_image(name) do
-    image_name =
-      name
-      |> with_latest_tag_by_default()
-
-    Docker.Api.Image.pull(image_name)
-  end
-
-  defp with_latest_tag_by_default(name) do
-    case String.contains?(name, ":") do
-      true -> name
-      false -> "#{name}:latest"
-    end
-  end
 end

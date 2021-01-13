@@ -21,7 +21,7 @@ defmodule Docker.Container do
         start_and_wait(container_id, container_config)
 
       {:error, {:http_error, 404}} ->
-        Docker.Api.pull_image(container_config.image)
+        Docker.Images.pull(container_config.image)
         run(container_config)
 
       {:error, reason} ->
