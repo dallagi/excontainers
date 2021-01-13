@@ -73,12 +73,12 @@ Please open an issue if you'd like to see new ones.
 #### Custom containers
 
 Excontainers can run any container that docker can.
-Custom container configurations can be built via `Excontainers.Containers.new`.
+Custom container configurations can be built via `Docker.Container.new`.
 
 For example:
 
 ```elixir
-custom_container_config = Excontainers.Containers.new(
+custom_container_config = Docker.Container.new(
   "alpine"
   cmd: ~w(echo hello world!),
   labels: %{"test-label-key" => "test-label-value"},
@@ -93,7 +93,7 @@ custom_container_config = Excontainers.Containers.new(
 A builder-like API to customize container configuration is also provided:
 
 ``` elixir
-alias Excontainers.Container
+alias Docker.Container
 
 custom_container_config =
   Container.new("alpine", cmd: ~w("echo hello world!"), privileged: false)
@@ -147,4 +147,5 @@ mix test
 * Decouple Excontainer from Docker API client (and mock interaction with docker in non-e2e tests for Excontainers)
 * Add logs wait strategy
 * Add TCP connection available wait strategy, and use it in tests that rely on echo http server, as sometimes it fails for not being initialized in time
+* Add run_container to README
 
