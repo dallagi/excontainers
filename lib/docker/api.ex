@@ -16,8 +16,4 @@ defmodule Docker.Api do
   defdelegate create_exec(container_id, command), to: Api.Exec, as: :create
 
   defdelegate inspect_exec(exec_id), to: Api.Exec, as: :inspect
-
-  # Part still to extract from Docker.Api
-
-  defdelegate exec_and_wait(container_id, command, options \\ []), to: Docker.Exec, as: :exec_and_wait
 end
