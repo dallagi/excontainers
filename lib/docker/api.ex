@@ -1,16 +1,15 @@
 defmodule Docker.Api do
   alias __MODULE__
-  alias Docker.Container
 
   defdelegate ping(), to: Api.Operation, as: :ping
 
-  defdelegate inspect_container(container_id), to: Api.Container, as: :inspect
+  defdelegate inspect_container(container_id), to: Api.Containers, as: :inspect
 
-  defdelegate create_container(container_config, name \\ nil), to: Api.Container, as: :create
+  defdelegate create_container(container_config, name \\ nil), to: Api.Containers, as: :create
 
-  defdelegate start_container(container_id), to: Api.Container, as: :start
+  defdelegate start_container(container_id), to: Api.Containers, as: :start
 
-  defdelegate stop_container(container_id, options \\ []), to: Api.Container, as: :stop
+  defdelegate stop_container(container_id, options \\ []), to: Api.Containers, as: :stop
 
   defdelegate start_exec(exec_id), to: Api.Exec, as: :start
 
@@ -21,6 +20,4 @@ defmodule Docker.Api do
   # Part still to extract from Docker.Api
 
   defdelegate exec_and_wait(container_id, command, options \\ []), to: Docker.Exec, as: :exec_and_wait
-
-  defdelegate run_container(container_config, name \\ nil), to: Container, as: :run
 end

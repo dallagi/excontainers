@@ -9,7 +9,7 @@ defmodule Excontainers.ResourcesReaperTest do
 
   test "when it terminates, reaps all registered resources after a timeout" do
     {:ok, resources_reaper_pid} = ResourcesReaper.start_link()
-    {:ok, container_id} = Docker.Api.run_container(@sample_container)
+    {:ok, container_id} = Docker.Containers.run(@sample_container)
 
     resources_reaper_pid
     |> ResourcesReaper.register({"id", container_id})

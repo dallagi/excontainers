@@ -14,14 +14,14 @@ defmodule Excontainers.Container do
   end
 
   def start(pid) do
-    {:ok, container_id} = Docker.Api.run_container(config(pid))
+    {:ok, container_id} = Docker.Containers.run(config(pid))
     set_container_id(pid, container_id)
     {:ok, container_id}
   end
 
   def stop(pid, opts \\ []) do
     container_id(pid)
-    |> Docker.Api.stop_container(opts)
+    |> Docker.Containers.stop(opts)
   end
 
   def config(pid) do
@@ -30,7 +30,7 @@ defmodule Excontainers.Container do
 
   def container_id(pid), do: Agent.get(pid, & &1.container_id)
 
-  def mapped_port(pid, port), do: Docker.Container.mapped_port(container_id(pid), port)
+  def mapped_port(pid, port), do: Docker.Containers.mapped_port(container_id(pid), port)
 
   defp set_container_id(pid, container_id) do
     Agent.update(pid, fn container ->
