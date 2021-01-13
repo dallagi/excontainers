@@ -7,11 +7,11 @@ defmodule Excontainers.ResourcesReaper do
   use GenServer
 
   alias Docker.BindMount
-  alias Excontainers.{Container, Containers}
+  alias Excontainers.Container
 
   @ryuk_port 8080
 
-  @ryuk Containers.new("testcontainers/ryuk:0.3.1",
+  @ryuk Docker.Container.new("testcontainers/ryuk:0.3.1",
           exposed_ports: [@ryuk_port],
           privileged: true,
           bind_mounts: [

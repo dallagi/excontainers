@@ -1,7 +1,7 @@
 defmodule Docker.ApiTest do
   use ExUnit.Case, async: true
 
-  alias Docker.{Api, ContainerConfig, ContainerState, BindMount}
+  alias Docker.{Api, Container, ContainerState, BindMount}
   alias Excontainers.CommandWaitStrategy
   import Support.DockerTestUtils
 
@@ -46,7 +46,7 @@ defmodule Docker.ApiTest do
     test "creates a container with the specified config" do
       unique_container_name = "test_create_container_#{UUID.uuid4()}"
 
-      config = %ContainerConfig{
+      config = %Container{
         image: @alpine,
         cmd: ["sleep", "infinity"],
         labels: %{"test-label-key" => "test-label-value"}
@@ -64,7 +64,7 @@ defmodule Docker.ApiTest do
     test "supports mapping ports on the container to random ports on the host" do
       unique_container_name = "test_create_container_#{UUID.uuid4()}"
 
-      config = %ContainerConfig{
+      config = %Container{
         image: @alpine,
         cmd: ["sleep", "infinity"],
         exposed_ports: ["1234/tcp"]
@@ -80,7 +80,7 @@ defmodule Docker.ApiTest do
     end
 
     test "supports setting environment variables" do
-      config = %ContainerConfig{
+      config = %Container{
         image: @alpine,
         cmd: ["sleep", "infinity"],
         environment: %{"TEST_VARIABLE" => "test value"}
@@ -95,7 +95,7 @@ defmodule Docker.ApiTest do
     end
 
     test "supports setting containers as privileged" do
-      config = %ContainerConfig{image: @alpine, privileged: true}
+      config = %Container{image: @alpine, privileged: true}
 
       {:ok, container_id} = Api.create_container(config)
 
@@ -104,7 +104,7 @@ defmodule Docker.ApiTest do
     end
 
     test "supports bind mounting volumes" do
-      config = %ContainerConfig{
+      config = %Container{
         image: @alpine,
         cmd: ["sleep", "infinity"],
         bind_mounts: [%BindMount{host_src: Path.expand("mix.exs"), container_dest: "/root/mix.exs"}]
@@ -119,7 +119,7 @@ defmodule Docker.ApiTest do
     end
 
     test "returns error when container configuration is invalid" do
-      config = %ContainerConfig{image: "invalid image"}
+      config = %Container{image: "invalid image"}
 
       assert {:error, _} = Api.create_container(config)
     end
@@ -192,7 +192,7 @@ defmodule Docker.ApiTest do
 
   describe "run_container/2" do
     test "creates and starts a container with the given config" do
-      container_config = %ContainerConfig{image: @alpine, cmd: ["sleep", "infinity"]}
+      container_config = %Container{image: @alpine, cmd: ["sleep", "infinity"]}
 
       {:ok, container_id} = Api.run_container(container_config)
       on_exit(fn -> remove_container(container_id) end)
@@ -201,7 +201,7 @@ defmodule Docker.ApiTest do
     end
 
     test "waits for container to be ready according to the wait strategy" do
-      container_config = %ContainerConfig{
+      container_config = %Container{
         image: @alpine,
         cmd: ["sh", "-c", "sleep 1 && touch /root/.ready && sleep infinity"],
         wait_strategy: CommandWaitStrategy.new(["ls", "/root/.ready"])
@@ -216,7 +216,7 @@ defmodule Docker.ApiTest do
     test "when image does not exist, automatically fetches it before starting the container" do
       image_that_no_one_should_be_using = "busybox:1.24.1-uclibc"
 
-      container_config = %ContainerConfig{
+      container_config = %Container{
         image: image_that_no_one_should_be_using,
         cmd: ["sleep", "infinity"]
       }

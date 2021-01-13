@@ -2,9 +2,9 @@ defmodule Excontainers.ContainerTest do
   use ExUnit.Case, async: true
 
   import Support.DockerTestUtils
-  alias Excontainers.{Container, Containers}
+  alias Excontainers.Container
 
-  @sample_container_config Containers.new("alpine:20201218", cmd: ["sleep", "infinity"])
+  @sample_container_config Docker.Container.new("alpine:20201218", cmd: ["sleep", "infinity"])
 
   test "starts a container" do
     {:ok, pid} = Container.start_link(@sample_container_config)
@@ -40,7 +40,7 @@ defmodule Excontainers.ContainerTest do
   end
 
   describe "mapped_port" do
-    @http_echo_container Containers.new(
+    @http_echo_container Docker.Container.new(
                            "hashicorp/http-echo:0.2.3",
                            cmd: ["-listen=:8080", ~s(-text="hello world")],
                            exposed_ports: [8080]

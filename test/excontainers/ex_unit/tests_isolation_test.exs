@@ -8,9 +8,9 @@ defmodule Excontainers.ExUnit.TestsIsolationTest do
     defmodule SampleTestWithIsolatedContainers do
       use ExUnit.Case
       import Excontainers.ExUnit
-      alias Excontainers.{Container, Containers}
+      alias Excontainers.Container
 
-      container(:alpine, Containers.new("alpine:20201218", cmd: ["sleep", "infinity"]))
+      container(:alpine, Docker.Container.new("alpine:20201218", cmd: ["sleep", "infinity"]))
 
       test "a test", %{alpine: alpine} do
         IO.puts("<container_id:#{Container.container_id(alpine)}>")
@@ -35,9 +35,9 @@ defmodule Excontainers.ExUnit.TestsIsolationTest do
     defmodule SampleTestWithSharedContainers do
       use ExUnit.Case
       import Excontainers.ExUnit
-      alias Excontainers.{Container, Containers}
+      alias Excontainers.Container
 
-      shared_container(:alpine, Containers.new("alpine:20201218", cmd: ["sleep", "infinity"]))
+      shared_container(:alpine, Docker.Container.new("alpine:20201218", cmd: ["sleep", "infinity"]))
 
       test "a test", %{alpine: alpine} do
         IO.puts("<container_id:#{Container.container_id(alpine)}>")

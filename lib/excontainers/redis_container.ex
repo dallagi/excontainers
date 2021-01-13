@@ -1,11 +1,11 @@
 defmodule Excontainers.RedisContainer do
-  alias Excontainers.{Container, Containers, CommandWaitStrategy}
+  alias Excontainers.{Container, CommandWaitStrategy}
 
   @redis_port 6379
   @wait_strategy CommandWaitStrategy.new(["redis-cli", "PING"])
 
   def new(image \\ "redis:6.0-alpine", _opts \\ []) do
-    Containers.new(
+    Docker.Container.new(
       image,
       exposed_ports: [@redis_port],
       environment: %{},

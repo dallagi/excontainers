@@ -1,6 +1,20 @@
 defmodule Docker.Container do
   alias Excontainers.WaitStrategy
 
+  @enforce_keys [:image]
+  defstruct [
+    :image,
+    cmd: nil,
+    environment: %{},
+    exposed_ports: [],
+    wait_strategy: nil,
+    privileged: false,
+    bind_mounts: [],
+    labels: %{}
+  ]
+
+  defdelegate new(image, opts \\ []), to: Docker.Container.Builder
+
   def run(container_config, name \\ nil) do
     case Docker.Api.create_container(container_config, name) do
       {:ok, container_id} ->

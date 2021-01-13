@@ -3,10 +3,10 @@ defmodule Excontainers.ExUnit.SimpleTest do
 
   import Excontainers.ExUnit
   import Support.DockerTestUtils
-  alias Excontainers.{Container, Containers}
+  alias Excontainers.Container
 
-  container(:alpine, Containers.new("alpine:20201218", cmd: ["sleep", "infinity"]))
-  shared_container(:shared_alpine, Containers.new("alpine:20201218", cmd: ["sleep", "infinity"]))
+  container(:alpine, Docker.Container.new("alpine:20201218", cmd: ["sleep", "infinity"]))
+  shared_container(:shared_alpine, Docker.Container.new("alpine:20201218", cmd: ["sleep", "infinity"]))
 
   test "container is ran during tests", %{alpine: alpine} do
     container_id = Container.container_id(alpine)

@@ -5,7 +5,6 @@ defmodule Excontainers.Container do
   use Agent
 
   alias __MODULE__
-  alias Excontainers.Containers
 
   @enforce_keys [:config]
   defstruct [:config, container_id: nil]
@@ -22,7 +21,7 @@ defmodule Excontainers.Container do
 
   def stop(pid, opts \\ []) do
     container_id(pid)
-    |> Containers.stop(opts)
+    |> Docker.Api.stop_container(opts)
   end
 
   def config(pid) do

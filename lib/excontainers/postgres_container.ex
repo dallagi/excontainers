@@ -1,11 +1,11 @@
 defmodule Excontainers.PostgresContainer do
-  alias Excontainers.{Container, Containers, CommandWaitStrategy}
+  alias Excontainers.{Container, CommandWaitStrategy}
 
   @postgres_port 5432
   @wait_strategy CommandWaitStrategy.new(["pg_isready", "-U", "test", "-d", "test", "-h", "localhost"])
 
   def new(image \\ "postgres:13.1", opts \\ []) do
-    Containers.new(
+    Docker.Container.new(
       image,
       exposed_ports: [@postgres_port],
       environment: %{

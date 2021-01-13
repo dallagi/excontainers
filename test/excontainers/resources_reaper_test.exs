@@ -1,10 +1,10 @@
 defmodule Excontainers.ResourcesReaperTest do
   use ExUnit.Case, async: true
 
-  alias Excontainers.{Containers, ResourcesReaper}
+  alias Excontainers.ResourcesReaper
   import Support.DockerTestUtils
 
-  @sample_container Containers.new("alpine", cmd: ~w(sleep infinity))
+  @sample_container Docker.Container.new("alpine", cmd: ~w(sleep infinity))
   @expected_timeout_seconds 10
 
   test "when it terminates, reaps all registered resources after a timeout" do

@@ -1,5 +1,4 @@
 defmodule Docker.Exec do
-
   defmodule ExecStatus do
     defstruct [:running, :exit_code]
   end
