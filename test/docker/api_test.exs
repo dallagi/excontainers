@@ -1,8 +1,7 @@
 defmodule Docker.ApiTest do
   use ExUnit.Case, async: true
 
-  alias Docker.{Api, Container, ContainerState, BindMount}
-  alias Excontainers.CommandWaitStrategy
+  alias Docker.{Api, BindMount, CommandWaitStrategy, Container, ContainerState}
   import Support.DockerTestUtils
 
   @alpine "alpine:20201218"

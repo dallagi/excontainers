@@ -1,5 +1,6 @@
 defmodule Excontainers.RedisContainer do
-  alias Excontainers.{Container, CommandWaitStrategy}
+  alias Excontainers.Container
+  alias Docker.CommandWaitStrategy
 
   @redis_port 6379
   @wait_strategy CommandWaitStrategy.new(["redis-cli", "PING"])

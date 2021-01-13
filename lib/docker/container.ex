@@ -1,5 +1,5 @@
 defmodule Docker.Container do
-  alias Excontainers.WaitStrategy
+  alias Docker.WaitStrategy
 
   @enforce_keys [:image]
   defstruct [

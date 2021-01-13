@@ -86,7 +86,7 @@ custom_container_config = Excontainers.Containers.new(
   environment: %{"SOME_KEY" => "SOME_VAL"},
   exposed_ports: [8080],
   bind_mounts: [Docker.BindMount.new("host/src", "container/dest/", "ro")],
-  wait_strategy: Excontainers.CommandWaitStrategy.new(["./command/to/check/if/container/is/ready.sh"])
+  wait_strategy: Docker.CommandWaitStrategy.new(["./command/to/check/if/container/is/ready.sh"])
 )
 ```
 
