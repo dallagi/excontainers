@@ -34,5 +34,4 @@ defmodule Docker.ImagesTest do
       assert {:error, _} = Images.pull("unexisting-image-#{UUID.uuid4()}")
     end
   end
-
 end
