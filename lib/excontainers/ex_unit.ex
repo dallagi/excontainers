@@ -4,7 +4,9 @@ defmodule Excontainers.ExUnit do
   defmacro container(name, config) do
     quote do
       setup do
-        do_setup_container(unquote(name), unquote(config))
+        {:ok, pid} = run_container(unquote(config))
+
+        {:ok, %{unquote(name) => pid}}
       end
     end
   end
@@ -12,12 +14,14 @@ defmodule Excontainers.ExUnit do
   defmacro shared_container(name, config) do
     quote do
       setup_all do
-        do_setup_container(unquote(name), unquote(config))
+        {:ok, pid} = run_container(unquote(config))
+
+        {:ok, %{unquote(name) => pid}}
       end
     end
   end
 
-  defmacro do_setup_container(name, config) do
+  defmacro run_container(config) do
     quote do
       {:ok, pid} = Container.start_link(unquote(config))
       {:ok, container_id} = pid |> Container.start()
@@ -25,7 +29,7 @@ defmodule Excontainers.ExUnit do
       on_exit(fn -> Docker.Containers.stop(container_id, timeout_seconds: 2) end)
       ResourcesReaper.register({"id", container_id})
 
-      {:ok, %{unquote(name) => pid}}
+      {:ok, pid}
     end
   end
 end
