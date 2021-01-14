@@ -49,6 +49,18 @@ end
 Containers declared using the `container` helper are created for each test.
 Alternatively, you can use `shared_container` to declare containers that are created once per each module and shared among its tests.
 
+To create a container for a specific test only, use the `run_container` macro as follows:
+
+```elixir
+test "my test" do
+  {:ok, redis} = run_container(RedisContainer.new())
+  connection_url = RedisContainer.connection_url(redis)
+  # ...
+end
+```
+
+`container`, `shared_container` and `run_container` will take care of cleaning up the containers once they are no longer needed.
+
 #### Direct usage
 
 If you want to use Excontainers outside of your Exunit tests,
@@ -142,7 +154,6 @@ mix test
 
 ## TODO
 
-* Better separate Docker from Excontainers (i.e. take non-strictly-api-related stuff out of Docker module)
 * To verify: timeout in pull_image is too low?
 * Decouple Excontainer from Docker API client (and mock interaction with docker in non-e2e tests for Excontainers)
 * Add logs wait strategy
