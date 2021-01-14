@@ -51,6 +51,7 @@ defmodule Excontainers.MixProject do
       {:elixir_uuid, "~> 1.2", only: [:dev, :test]},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:myxql, "~> 0.4.0", only: [:dev, :test]},
       {:postgrex, "~> 0.15", only: [:dev, :test]},
       {:redix, ">= 0.0.0", only: [:dev, :test]}
     ]

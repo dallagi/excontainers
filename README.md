@@ -65,6 +65,7 @@ you can use the `Excontainers.Container` agent:
 
 The following containers are currently provided pre-configured:
 
+* `Excontainers.MySqlContainer`
 * `Excontainers.PostgresContainer`
 * `Excontainers.RedisContainer`
 
@@ -143,9 +144,7 @@ mix test
 
 * Better separate Docker from Excontainers (i.e. take non-strictly-api-related stuff out of Docker module)
 * To verify: timeout in pull_image is too low?
-* To verify: apparently, API to pull images pulls ALL TAGS when no tag is given?!
 * Decouple Excontainer from Docker API client (and mock interaction with docker in non-e2e tests for Excontainers)
 * Add logs wait strategy
 * Add TCP connection available wait strategy, and use it in tests that rely on echo http server, as sometimes it fails for not being initialized in time
 * Add run_container to README
-
