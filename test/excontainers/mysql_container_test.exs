@@ -16,10 +16,10 @@ defmodule Excontainers.MySqlContainerTest do
 
   describe "with custom configuration" do
     @custom_mysql MySqlContainer.new("mysql:5.7.32",
-                       username: "custom-user",
-                       password: "custom-password",
-                       database: "custom-database"
-                     )
+                    username: "custom-user",
+                    password: "custom-password",
+                    database: "custom-database"
+                  )
 
     container(:mysql, @custom_mysql)
 

@@ -79,7 +79,7 @@ defmodule Excontainers.ExUnit.TestsIsolationTest do
     container_id = capture_io(run_tests)
 
     assert String.length(container_id) > 0
-    refute container_running? container_id
+    refute container_running?(container_id)
   end
 
   defp parse_containers_ids_from_tests_output(tests_output) do

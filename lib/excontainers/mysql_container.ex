@@ -37,6 +37,10 @@ defmodule Excontainers.MySqlContainer do
 
   defp wait_strategy(username, password) do
     # CommandWaitStrategy.new(["mysqladmin", "ping", "--user='#{username}'", "--password='#{password}'", "-h", "localhost"])
-    CommandWaitStrategy.new(["sh", "-c", "mysqladmin ping --user='#{username}' --password='#{password}' -h localhost | grep 'mysqld is alive'"])
+    CommandWaitStrategy.new([
+      "sh",
+      "-c",
+      "mysqladmin ping --user='#{username}' --password='#{password}' -h localhost | grep 'mysqld is alive'"
+    ])
   end
 end
