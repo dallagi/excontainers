@@ -5,6 +5,11 @@ defmodule Excontainers.RedisContainer do
   @redis_port 6379
   @wait_strategy CommandWaitStrategy.new(["redis-cli", "PING"])
 
+  @doc """
+  Creates a Redis container.
+
+  Runs Redis 6.0 by default, but a custom image can also be set.
+  """
   def new(image \\ "redis:6.0-alpine", _opts \\ []) do
     Docker.Container.new(
       image,
@@ -14,7 +19,13 @@ defmodule Excontainers.RedisContainer do
     )
   end
 
+  @doc """
+  Returns the port on the _host machine_ where the Redis container is listening.
+  """
   def port(pid), do: Container.mapped_port(pid, @redis_port)
 
+  @doc """
+  Returns the connection url to connect to Redis from the _host machine_.
+  """
   def connection_url(pid), do: "redis://localhost:#{port(pid)}/"
 end

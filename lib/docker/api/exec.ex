@@ -1,4 +1,6 @@
 defmodule Docker.Api.Exec do
+  @doc false
+
   alias Docker.Api.Client
 
   def inspect(exec_id) do

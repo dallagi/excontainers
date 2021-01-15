@@ -5,6 +5,17 @@ defmodule Excontainers.PostgresContainer do
   @postgres_port 5432
   @wait_strategy CommandWaitStrategy.new(["pg_isready", "-U", "test", "-d", "test", "-h", "localhost"])
 
+  @doc """
+  Creates a PostgreSql container.
+
+  Runs PostgreSql 13.1 by default, but a custom image can also be set.
+
+  ## Options
+
+  - `username` sets the username for the user
+  - `password` sets the password for the user
+  - `database` sets the name of the database
+  """
   def new(image \\ "postgres:13.1", opts \\ []) do
     Docker.Container.new(
       image,
@@ -18,8 +29,14 @@ defmodule Excontainers.PostgresContainer do
     )
   end
 
+  @doc """
+  Returns the port on the _host machine_ where the MySql container is listening.
+  """
   def port(pid), do: Container.mapped_port(pid, @postgres_port)
 
+  @doc """
+  Returns the connection parameters to connect to the database from the _host machine_.
+  """
   def connection_parameters(pid) do
     config = Container.config(pid)
 

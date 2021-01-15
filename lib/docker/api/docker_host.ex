@@ -1,4 +1,6 @@
 defmodule Docker.Api.DockerHost do
+  @doc false
+
   use Gestalt
 
   @default_host "unix:///var/run/docker.sock"

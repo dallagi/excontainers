@@ -1,4 +1,6 @@
 defmodule Docker.Api.Operation do
+  @doc false
+
   alias Docker.Api.Client
 
   def ping() do

@@ -1,4 +1,7 @@
 defmodule Docker.CommandWaitStrategy do
+  @doc """
+  Consider container as ready as soon as a command runs successfully inside the container.
+  """
   defstruct [:command]
 
   def new(command), do: %__MODULE__{command: command}
