@@ -1,4 +1,8 @@
 defmodule Excontainers.RedisContainer do
+  @moduledoc """
+  Functions to build and interact with Redis containers.
+  """
+
   alias Excontainers.Container
   alias Docker.CommandWaitStrategy
 

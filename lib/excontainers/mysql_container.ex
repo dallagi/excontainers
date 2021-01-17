@@ -1,13 +1,17 @@
 defmodule Excontainers.MySqlContainer do
+  @moduledoc """
+  Functions to build and interact with MySql containers.
+  """
+
   alias Excontainers.Container
   alias Docker.CommandWaitStrategy
 
   @mysql_port 3306
 
   @doc """
-  Creates a MySql container.
+  Builds a MySql container.
 
-  Runs MySql 8.0 by default, but a custom image can also be set.
+  Uses MySql 8.0 by default, but a custom image can also be set.
 
   ## Options
 

@@ -1,4 +1,8 @@
 defmodule Excontainers.PostgresContainer do
+  @moduledoc """
+  Functions to build and interact with PostgreSql containers.
+  """
+
   alias Excontainers.Container
   alias Docker.CommandWaitStrategy
 
@@ -6,9 +10,9 @@ defmodule Excontainers.PostgresContainer do
   @wait_strategy CommandWaitStrategy.new(["pg_isready", "-U", "test", "-d", "test", "-h", "localhost"])
 
   @doc """
-  Creates a PostgreSql container.
+  Builds a PostgreSql container.
 
-  Runs PostgreSql 13.1 by default, but a custom image can also be set.
+  Uses PostgreSql 13.1 by default, but a custom image can also be set.
 
   ## Options
 

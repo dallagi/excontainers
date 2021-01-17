@@ -1,5 +1,5 @@
 defmodule Docker.Api.Containers do
-  @doc false
+  @moduledoc false
 
   alias Docker.Api.Client
   alias Docker.ContainerState

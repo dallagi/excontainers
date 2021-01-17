@@ -1,4 +1,8 @@
 defmodule Support.DockerTestUtils do
+  @moduledoc """
+  Helper utils for tests that test integration with Docker.
+  """
+
   @sample_image "alpine:20201218"
 
   defmacro create_a_container() do

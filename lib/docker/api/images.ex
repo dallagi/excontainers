@@ -1,5 +1,5 @@
 defmodule Docker.Api.Images do
-  @doc false
+  @moduledoc false
 
   alias Docker.Api.Client
 

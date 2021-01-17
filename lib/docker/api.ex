@@ -1,4 +1,5 @@
 defmodule Docker.Api do
+  @moduledoc false
   alias __MODULE__
 
   defdelegate ping(), to: Api.Operation, as: :ping

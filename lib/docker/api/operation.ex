@@ -1,5 +1,5 @@
 defmodule Docker.Api.Operation do
-  @doc false
+  @moduledoc false
 
   alias Docker.Api.Client
 

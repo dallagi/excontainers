@@ -1,4 +1,5 @@
 defmodule Docker.Containers do
+  @moduledoc false
   alias Docker.WaitStrategy
 
   def create(container_config, name \\ nil) do

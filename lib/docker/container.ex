@@ -1,4 +1,7 @@
 defmodule Docker.Container do
+  @moduledoc """
+  Specification for a _container_.
+  """
   alias Docker.{BindMount, Container}
 
   @enforce_keys [:image]

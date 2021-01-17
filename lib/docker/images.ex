@@ -1,4 +1,6 @@
 defmodule Docker.Images do
+  @moduledoc false
+
   def pull(name) do
     image_name =
       name

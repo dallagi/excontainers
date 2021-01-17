@@ -1,9 +1,12 @@
 defmodule Docker.ContainerState do
+  @moduledoc false
   defstruct [:id, :status, :mapped_ports]
 
   alias __MODULE__
 
   defmodule Status do
+    @moduledoc false
+
     @allowed_statuses ~w(created running paused restarting removing exited dead)
     @type state :: :created | :running | :paused | :restarting | :removing | :exited | :dead
 

@@ -1,5 +1,5 @@
 defmodule Docker.Api.DockerHost do
-  @doc false
+  @moduledoc false
 
   use Gestalt
 

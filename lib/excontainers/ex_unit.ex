@@ -1,4 +1,8 @@
 defmodule Excontainers.ExUnit do
+  @moduledoc """
+  Convenient macros to run containers within ExUnit tests.
+  """
+
   alias Excontainers.{Container, ResourcesReaper}
 
   @doc """

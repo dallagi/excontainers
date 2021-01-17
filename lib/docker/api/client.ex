@@ -1,5 +1,5 @@
 defmodule Docker.Api.Client do
-  @doc false
+  @moduledoc false
 
   use Tesla
 

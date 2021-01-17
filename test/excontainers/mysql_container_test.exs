@@ -8,7 +8,7 @@ defmodule Excontainers.MySqlContainerTest do
     container(:mysql, MySqlContainer.new())
 
     test "provides a ready-to-use mysql container", %{mysql: mysql} do
-      {:ok, pid} = MyXQL.start_link(IO.inspect(MySqlContainer.connection_parameters(mysql)))
+      {:ok, pid} = MyXQL.start_link(MySqlContainer.connection_parameters(mysql))
 
       assert %{num_rows: 1} = MyXQL.query!(pid, "SELECT 1", [])
     end
