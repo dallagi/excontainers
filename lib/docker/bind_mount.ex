@@ -8,10 +8,10 @@ defmodule Docker.BindMount do
   The mode (`"ro"` or `"rw"`) can also be set.
   """
   @type t :: %__MODULE__{
-    host_src: String.t(),
-    container_dest: String.t(),
-    options: String.t()
-  }
+          host_src: String.t(),
+          container_dest: String.t(),
+          options: String.t()
+        }
 
   defstruct ~w(host_src container_dest options)a
 
