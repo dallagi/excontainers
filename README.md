@@ -152,10 +152,9 @@ Run tests with
 mix test
 ```
 
-## TODO
+### TODO
 
-* To verify: timeout in pull_image is too low?
-* Decouple Excontainer from Docker API client (and mock interaction with docker in non-e2e tests for Excontainers)
+* Mock interaction with docker in non-e2e tests for Excontainers?
 * Add logs wait strategy
 * Add TCP connection available wait strategy, and use it in tests that rely on echo http server, as sometimes it fails for not being initialized in time
-* Add run_container to README
+* Add more pre-configured images (localstack, rabbit, ...)
