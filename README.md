@@ -109,7 +109,7 @@ A builder-like API to customize container configuration is also provided:
 alias Docker.Container
 
 custom_container_config =
-  Container.new("alpine", cmd: ~w("echo hello world!"), privileged: false)
+  Container.new("alpine", cmd: ~w(echo hello world!), privileged: false)
   |> Container.with_environment("SOME_KEY", "SOME_VAL")
   |> Container.with_exposed_port(8080)
   |> Container.with_bind_mount("host/src", "container/dest", "ro")
@@ -129,7 +129,7 @@ To enable the _Resources Reaper_, simply spawn it before you run your tests, e.g
 Excontainers.ResourcesReaper.start_link()
 ```
 
-Containers managed via the `container` and `shared_container` helpers for ExUnit are automatically registered to the _Resources Reaper_.
+Containers managed via the `container`, `shared_container` and `run_container` helpers for ExUnit are automatically registered to the _Resources Reaper_.
 
 When controlling the lifecycle of containers manually, containers can be registered to the _Resources Reaper_ like this:
 
@@ -154,10 +154,3 @@ Run tests with
 ```
 mix test
 ```
-
-### TODO
-
-* Mock interaction with docker in non-e2e tests for Excontainers?
-* Add logs wait strategy
-* Add TCP connection available wait strategy, and use it in tests that rely on echo http server, as sometimes it fails for not being initialized in time
-* Add more pre-configured images (localstack, rabbit, ...)
