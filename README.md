@@ -140,6 +140,9 @@ Excontainers.ResourcesReaper.register({"id", my_container_id})
 `{"id", my_container_id}` is a [filter for docker resources](https://docs.docker.com/engine/reference/commandline/ps/#filtering) that works on the id of the container.
 Other attributes (e.g., `label`s) could also be used.
 
+Please note that using the id as filter for resources reaping may lead to (albeit unlikely) race conditions, where the BEAM crashes between the spawning of the container and the registration for resources reaping.
+A workaround for this is to use a filter that is known before spawning the container, e.g. a label that is then applied to the container.
+
 ## Development
 
 ### Testing
