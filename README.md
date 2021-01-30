@@ -7,7 +7,15 @@
 Throwaway test containers for Elixir/Erlang applications.
 Heavily inspired by [Testcontainers](https://www.testcontainers.org/).
 
-**This package is still in the early stages of development. You are encouraged to give it a try, but you should not regard it as ready for critical real world scenarios.**
+#### Project status
+
+**This package has not seen much real-world usage yet, hence it should not be considered as stable.**
+You are encouraged to give it a try and report back problems you may experience.
+
+Excontainers was started as a personal study project to practice Elixir.
+The core functionalities are implemented and tested, and I plan to eventually evolve it beyond the scope of providing throwaway containers for tests.
+
+However the development is paused, as I'm currently focused on other matters.
 
 ## Installation
 
