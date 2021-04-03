@@ -15,7 +15,7 @@ You are encouraged to give it a try and report back problems you may experience.
 Excontainers was started as a personal study project to practice Elixir.
 The core functionalities are implemented and tested, and I plan to eventually evolve it beyond the scope of providing throwaway containers for tests.
 
-However the development is paused, as I'm currently focused on other matters.
+However the development is slow, as I'm currently focused on other matters.
 
 ## Installation
 
@@ -73,10 +73,18 @@ end
 
 If you want to use Excontainers outside of your Exunit tests,
 or if you'd like to have direct control over the lifecycle of your containers,
-you can use the `Excontainers.Container` agent:
+you can use `Excontainers.Container`:
 
 ```elixir
 {:ok, pid} = Container.start_link(@sample_container_config)
+```
+
+It is also possible to place `Excontainers.Container` under a supervision tree:
+
+``` elixir
+children = [
+  {Excontainers.Container, @sample_container_config},
+]
 ```
 
 ### Containers
