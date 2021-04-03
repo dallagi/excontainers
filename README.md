@@ -24,7 +24,7 @@ The package can be installed by adding `excontainers` to your list of dependenci
 ```elixir
 def deps do
   [
-    {:excontainers, "~> 0.2.1", only: [:dev, :test]},
+    {:excontainers, "~> 0.3.0", only: [:dev, :test]},
   ]
 end
 ```
@@ -103,7 +103,7 @@ custom_container_config = Docker.Container.new(
   labels: %{"test-label-key" => "test-label-value"},
   privileged: false,
   environment: %{"SOME_KEY" => "SOME_VAL"},
-  exposed_ports: [8080, "1234/udp": 1234],
+  exposed_ports: [8080, "1234/udp": 1234], # 8080 will be mapped on a random host port
   bind_mounts: [Docker.BindMount.new("host/src", "container/dest/", "ro")],
   wait_strategy: Docker.CommandWaitStrategy.new(["./command/to/check/if/container/is/ready.sh"])
 )
