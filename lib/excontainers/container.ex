@@ -7,10 +7,17 @@ defmodule Excontainers.Container do
   @enforce_keys [:config]
   defstruct [:config, container_id: nil]
 
+  @doc """
+  Starts a container and blocks until container is ready.
+  """
   def start_link(config, options \\ []) do
     GenServer.start_link(__MODULE__, config, options)
   end
 
+  @doc """
+  Stops the Container GenServer.
+  When terminated in a non-brutal way, it also stops the container on Docker.
+  """
   def stop(server, reason \\ :normal, timeout \\ :infinity) do
     GenServer.stop(server, reason, timeout)
   end
