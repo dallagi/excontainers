@@ -105,7 +105,7 @@ custom_container_config = Docker.Container.new(
   labels: %{"test-label-key" => "test-label-value"},
   privileged: false,
   environment: %{"SOME_KEY" => "SOME_VAL"},
-  exposed_ports: [8080],
+  exposed_ports: [8080, "1234/udp": 1234],
   bind_mounts: [Docker.BindMount.new("host/src", "container/dest/", "ro")],
   wait_strategy: Docker.CommandWaitStrategy.new(["./command/to/check/if/container/is/ready.sh"])
 )

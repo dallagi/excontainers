@@ -56,12 +56,18 @@ defmodule Docker.Api.Containers do
   defp container_create_payload(container_config) do
     port_bindings_config =
       container_config.exposed_ports
-      |> Enum.map(fn port -> {port, [%{"HostPort" => ""}]} end)
+      |> Enum.map(fn
+        {container_port, host_port} -> {container_port, [%{"HostPort" => to_string(host_port)}]}
+        port -> {port, [%{"HostPort" => ""}]}
+      end)
       |> Enum.into(%{})
 
     exposed_ports_config =
       container_config.exposed_ports
-      |> Enum.map(fn port -> {port, %{}} end)
+      |> Enum.map(fn
+        {container_port, _host_port} -> {container_port, %{}}
+        port -> {port, %{}}
+      end)
       |> Enum.into(%{})
 
     env_config =

@@ -48,6 +48,24 @@ defmodule Docker.ContainersTest do
       assert container_port =~ "1234/tcp"
     end
 
+    test "supports mapping ports on the container to specific ports on the host" do
+      unique_container_name = "test_create_container_#{UUID.uuid4()}"
+
+      config = %Container{
+        image: @alpine,
+        cmd: ["sleep", "infinity"],
+        exposed_ports: ["1234/tcp": 8792]
+      }
+
+      on_exit(fn -> remove_container(unique_container_name) end)
+
+      {:ok, container_id} = Containers.create(config, unique_container_name)
+
+      System.cmd("docker", ["start", container_id])
+      {container_port, _exit_code = 0} = System.cmd("docker", ["port", container_id])
+      assert container_port =~ "1234/tcp -> 0.0.0.0:8792"
+    end
+
     test "supports setting environment variables" do
       config = %Container{
         image: @alpine,
