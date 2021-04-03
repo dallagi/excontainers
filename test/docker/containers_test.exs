@@ -214,7 +214,7 @@ defmodule Docker.ContainersTest do
           "8080"
         )
 
-      port = Docker.Containers.mapped_port(container_id, 8080)
+      {:ok, port} = Docker.Containers.mapped_port(container_id, 8080)
       {:ok, response} = Tesla.get("http://localhost:#{port}/")
 
       assert is_integer(port)

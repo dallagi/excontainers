@@ -5,7 +5,7 @@ defmodule Excontainers.ResourcesReaperTest do
   import Support.DockerTestUtils
 
   @sample_container Docker.Container.new("alpine", cmd: ~w(sleep infinity))
-  @expected_timeout_seconds 10
+  @expected_timeout_seconds 15
 
   test "when it terminates, reaps all registered resources after a timeout" do
     {:ok, resources_reaper_pid} = ResourcesReaper.start_link()

@@ -77,8 +77,6 @@ you can use the `Excontainers.Container` agent:
 
 ```elixir
 {:ok, pid} = Container.start_link(@sample_container_config)
-{:ok, container_id} = Container.start(pid)
-:ok = Container.stop(pid)
 ```
 
 ### Containers

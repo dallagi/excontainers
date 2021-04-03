@@ -37,9 +37,12 @@ defmodule Docker.Containers do
 
     case info(container) do
       {:ok, info} ->
-        info.mapped_ports
-        |> Map.get(container_port)
-        |> String.to_integer()
+        port =
+          info.mapped_ports
+          |> Map.get(container_port)
+          |> String.to_integer()
+
+        {:ok, port}
 
       {:error, message} ->
         {:error, message}

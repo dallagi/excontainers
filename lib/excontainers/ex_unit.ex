@@ -43,7 +43,7 @@ defmodule Excontainers.ExUnit do
   defmacro run_container(config) do
     quote do
       {:ok, pid} = Container.start_link(unquote(config))
-      {:ok, container_id} = pid |> Container.start()
+      container_id = Container.container_id(pid)
 
       on_exit(fn -> Docker.Containers.stop(container_id, timeout_seconds: 2) end)
       ResourcesReaper.register({"id", container_id})

@@ -8,18 +8,18 @@ defmodule Excontainers.ContainerTest do
 
   test "starts a container" do
     {:ok, pid} = Container.start_link(@sample_container_config)
+    container_id = Container.container_id(pid)
 
-    {:ok, container_id} = Container.start(pid)
     on_exit(fn -> remove_container(container_id) end)
 
     assert container_running?(container_id)
   end
 
-  test "stops a container" do
+  test "when terminating it stops a container" do
     {:ok, pid} = Container.start_link(@sample_container_config)
-    {:ok, container_id} = Container.start(pid)
+    container_id = Container.container_id(pid)
 
-    :ok = Container.stop(pid, timeout_seconds: 1)
+    Container.stop(pid)
 
     refute container_running?(container_id)
   end
@@ -32,9 +32,8 @@ defmodule Excontainers.ContainerTest do
 
   test "stores the id of the corresponding docker container, when running" do
     {:ok, pid} = Container.start_link(@sample_container_config)
-    assert Container.container_id(pid) == nil
 
-    {:ok, container_id} = Container.start(pid)
+    container_id = Container.container_id(pid)
     on_exit(fn -> remove_container(container_id) end)
     assert Container.container_id(pid) == container_id
   end
@@ -48,7 +47,7 @@ defmodule Excontainers.ContainerTest do
 
     test "gets the host port corresponding to a mapped port in the container" do
       {:ok, pid} = Container.start_link(@http_echo_container)
-      {:ok, container_id} = Container.start(pid)
+      container_id = Container.container_id(pid)
       on_exit(fn -> remove_container(container_id) end)
 
       port = Container.mapped_port(pid, 8080)

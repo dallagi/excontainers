@@ -36,7 +36,7 @@ defmodule Excontainers.PostgresContainer do
   @doc """
   Returns the port on the _host machine_ where the MySql container is listening.
   """
-  def port(pid), do: Container.mapped_port(pid, @postgres_port)
+  def port(pid), do: with({:ok, port} <- Container.mapped_port(pid, @postgres_port), do: port)
 
   @doc """
   Returns the connection parameters to connect to the database from the _host machine_.

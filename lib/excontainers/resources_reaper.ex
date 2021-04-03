@@ -67,8 +67,6 @@ defmodule Excontainers.ResourcesReaper do
 
   defp start_ryuk do
     {:ok, ryuk_pid} = Container.start_link(@ryuk)
-    Container.start(ryuk_pid)
-
     {:ok, ryuk_pid}
   end
 

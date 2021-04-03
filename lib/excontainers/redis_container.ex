@@ -26,7 +26,7 @@ defmodule Excontainers.RedisContainer do
   @doc """
   Returns the port on the _host machine_ where the Redis container is listening.
   """
-  def port(pid), do: Container.mapped_port(pid, @redis_port)
+  def port(pid), do: with({:ok, port} <- Container.mapped_port(pid, @redis_port), do: port)
 
   @doc """
   Returns the connection url to connect to Redis from the _host machine_.
