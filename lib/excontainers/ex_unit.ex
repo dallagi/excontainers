@@ -2,6 +2,7 @@ defmodule Excontainers.ExUnit do
   @moduledoc """
   Convenient macros to run containers within ExUnit tests.
   """
+  import ExUnit.Callbacks
 
   alias Excontainers.{Container, ResourcesReaper}
 
@@ -40,15 +41,13 @@ defmodule Excontainers.ExUnit do
 
   It also sets up the ExUnit callback to remove the container after the test finishes.
   """
-  defmacro run_container(config) do
-    quote do
-      {:ok, pid} = Container.start_link(unquote(config))
-      container_id = Container.container_id(pid)
+  def run_container(config) do
+    {:ok, pid} = Container.start_link(config)
+    container_id = Container.container_id(pid)
 
-      on_exit(fn -> Docker.Containers.stop(container_id, timeout_seconds: 2) end)
-      ResourcesReaper.register({"id", container_id})
+    on_exit(fn -> Docker.Containers.stop(container_id, timeout_seconds: 2) end)
+    ResourcesReaper.register({"id", container_id})
 
-      {:ok, pid}
-    end
+    {:ok, pid}
   end
 end
