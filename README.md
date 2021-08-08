@@ -35,7 +35,7 @@ Documentation can be found at [https://hexdocs.pm/excontainers](https://hexdocs.
 
 #### ExUnit
 
-Create a throwaway container (in this case Redis) within a ExUnit test:
+Create a throwaway container (e.g., Redis) within a ExUnit test:
 
 ``` elixir
 defmodule Excontainers.RedisContainerTest do
@@ -54,8 +54,8 @@ defmodule Excontainers.RedisContainerTest do
 end
 ```
 
-Containers declared using the `container` helper are created for each test.
-Alternatively, you can use `shared_container` to declare containers that are created once per each module and shared among its tests.
+Containers declared using the `container` helper are created anew for each test.
+Alternatively, you can use `shared_container` to declare containers that are created once per each module and shared among its tests. 
 
 To create a container for a specific test only, use the `run_container` macro as follows:
 
@@ -135,7 +135,7 @@ Under normal circumstances, Excontainers removes the containers it spawned after
 However, it may fail to do so when tests are interrupted abruptly, preventing ExUnit from running the necessary callbacks.
 
 Excontainers provides a _Resources Reaper_ that makes sure containers are removed when they are no longer useful.
-It runs in its own docker container, so it is not affected by crashes or problems with the tests suite.
+It runs in its own docker container, so it is not affected by crashes of the BEAM or problems with the tests suite.
 
 To enable the _Resources Reaper_, simply spawn it before you run your tests, e.g., by adding this to your `tests_helper.exs`:
 
