@@ -1,13 +1,17 @@
-# Excontainers
+<div align="center">
+  <h1 style="width: 100%; text-align: center">Excontainers</h1>
+  <p style="font-size: 18px; white-space: pre-line"> 
+    Throwaway test containers for Elixir/Erlang applications.
+    Heavily inspired by <a href="https://www.testcontainers.org/">Testcontainers</a>.
+  </p>
+</div>
+<div align="center" style="text-align: center;">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/dallagi/excontainers/Elixir%20CI">
+  <img alt="Coveralls" src="https://img.shields.io/coveralls/github/dallagi/excontainers">
+  <img alt="Hex.pm" src="https://img.shields.io/hexpm/v/excontainers">
+</div>
 
-![CircleCI](https://img.shields.io/circleci/build/github/dallagi/excontainers/master)
-![Coveralls github](https://img.shields.io/coveralls/github/dallagi/excontainers)
-![Hex.pm](https://img.shields.io/hexpm/v/excontainers)
-
-Throwaway test containers for Elixir/Erlang applications.
-Heavily inspired by [Testcontainers](https://www.testcontainers.org/).
-
-#### Project status
+## Project status
 
 **This package has not seen much real-world usage yet, hence it should not be considered as stable.**
 You are encouraged to give it a try and report back problems you may experience.
