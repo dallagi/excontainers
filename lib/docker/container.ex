@@ -14,7 +14,8 @@ defmodule Docker.Container do
     wait_strategy: nil,
     privileged: false,
     bind_mounts: [],
-    labels: %{}
+    labels: %{},
+    auto_remove: true
   ]
 
   @doc """
@@ -26,8 +27,9 @@ defmodule Docker.Container do
   - `cmd` sets the command to run in the container
   - `environment` sets the environment variables for the container
   - `exposed_ports` sets the ports to expose to the host
-  - `privileged` indicates whether the container should run in privileged mode
+  - `privileged` indicates whether the container should run in privileged mode (default false)
   - `wait_strategy` sets the strategy to adopt to determine whether the container is ready for use
+  - `auto_remove` whether to automatically remove the container after it's stopped (default true)
 
   """
   def new(image, opts \\ []) do
@@ -42,7 +44,8 @@ defmodule Docker.Container do
       environment: opts[:environment] || %{},
       exposed_ports: exposed_ports,
       privileged: opts[:privileged] || false,
-      wait_strategy: opts[:wait_strategy]
+      wait_strategy: opts[:wait_strategy],
+      auto_remove: opts[:auto_remove] || true
     }
   end
 

@@ -86,7 +86,12 @@ defmodule Docker.Api.Containers do
       ExposedPorts: exposed_ports_config,
       Env: env_config,
       Labels: container_config.labels,
-      HostConfig: %{PortBindings: port_bindings_config, Privileged: container_config.privileged, Binds: volume_bindings}
+      HostConfig: %{
+        AutoRemove: container_config.auto_remove,
+        PortBindings: port_bindings_config,
+        Privileged: container_config.privileged,
+        Binds: volume_bindings
+      }
     }
     |> remove_nil_values
   end
