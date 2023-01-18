@@ -4,7 +4,7 @@ defmodule Excontainers.ResourcesReaperTest do
   alias Excontainers.ResourcesReaper
   import Support.DockerTestUtils
 
-  @sample_container Docker.Container.new("alpine", cmd: ~w(sleep infinity))
+  @sample_container Docker.Container.new("alpine", cmd: ~w(sleep infinity), auto_remove: false)
   @expected_timeout_seconds 15
 
   test "when it terminates, reaps all registered resources after a timeout" do
@@ -28,10 +28,5 @@ defmodule Excontainers.ResourcesReaperTest do
     time_to_wait_ms = (@expected_timeout_seconds + 1) * 1000
 
     :timer.sleep(time_to_wait_ms)
-  end
-
-  defp container_exists?(container_id) do
-    {all_containers, _exit_code = 0} = System.cmd("docker", ~w(ps -a))
-    all_containers =~ short_id(container_id)
   end
 end
