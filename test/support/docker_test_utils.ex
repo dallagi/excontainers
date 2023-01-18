@@ -37,6 +37,11 @@ defmodule Support.DockerTestUtils do
     running_containers_output =~ short_id(container_id)
   end
 
+  def container_exists?(container_id) do
+    {all_containers, _exit_code = 0} = System.cmd("docker", ~w(ps -a))
+    all_containers =~ short_id(container_id)
+  end
+
   def image_exists?(image_name) do
     {stdout, _exit_code = 0} = System.cmd("docker", ["images", "-q", image_name])
 
