@@ -14,5 +14,4 @@ defmodule Excontainers.AutoRemoveTest do
 
     refute container_exists?(container_id)
   end
-
 end
