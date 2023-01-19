@@ -6,7 +6,7 @@
   </p>
 </div>
 <div align="center" style="text-align: center;">
-  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/dallagi/excontainers/Elixir%20CI">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/dallagi/excontainers/ci.yml?branch=master">
   <img alt="Coveralls" src="https://img.shields.io/coveralls/github/dallagi/excontainers">
   <img alt="Hex.pm" src="https://img.shields.io/hexpm/v/excontainers">
 </div>
