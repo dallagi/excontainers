@@ -28,7 +28,7 @@ The package can be installed by adding `excontainers` to your list of dependenci
 ```elixir
 def deps do
   [
-    {:excontainers, "~> 0.3.0", only: [:dev, :test]},
+    {:excontainers, "~> 0.3.1", only: [:dev, :test]},
   ]
 end
 ```
