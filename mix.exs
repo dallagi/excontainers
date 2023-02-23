@@ -49,7 +49,7 @@ defmodule Excontainers.MixProject do
 
       {:hackney, "~> 1.16"},
       {:jason, ">= 1.0.0"},
-      {:tesla, "~> 1.4.0"},
+      {:tesla, "~> 1.4.0 or ~> 1.5.0"},
       {:gestalt, "~> 1.0"},
       {:excoveralls, "~> 0.13", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
