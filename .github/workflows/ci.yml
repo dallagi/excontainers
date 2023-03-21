@@ -32,6 +32,4 @@ jobs:
     - name: Check formatting
       run: mix format --check-formatted
     - name: Run tests
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-      run: mix coveralls.post --trace -t $COVERALLS_REPO_TOKEN
+      run: mix test
