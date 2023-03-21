@@ -24,6 +24,7 @@ defmodule Excontainers.Container do
 
   @impl true
   def init(config) do
+    Process.flag(:trap_exit, true)
     {:ok, container_id} = Docker.Containers.run(config)
 
     {:ok, %__MODULE__{config: config, container_id: container_id}}
