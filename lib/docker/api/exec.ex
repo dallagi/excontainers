@@ -29,6 +29,14 @@ defmodule Docker.Api.Exec do
     end
   end
 
+  def stdout_logs(container_id) do
+    case Client.get("/containers/#{container_id}/logs?stdout=true") do
+      {:ok, %{status: 200, body: body}} -> {:ok, body}
+      {:ok, %{status: status}} -> {:error, {:http_error, status}}
+      {:error, message} -> {:error, message}
+    end
+  end
+
   defp parse_inspect_result(json) do
     %Docker.Exec.ExecStatus{running: json["Running"], exit_code: json["ExitCode"]}
   end

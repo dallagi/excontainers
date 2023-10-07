@@ -56,7 +56,16 @@ defmodule Docker.Containers do
     :ok = Docker.Containers.start(container_id)
 
     if container_config.wait_strategy do
-      :ok = WaitStrategy.wait_until_container_is_ready(container_config.wait_strategy, container_id)
+      :ok =
+        case WaitStrategy.wait_until_container_is_ready(container_config.wait_strategy, container_id) do
+          {:error, :suppressed_error} ->
+            # explicitly allowing :suppressed_error
+            # some logging must be done here
+            :ok
+
+          :ok ->
+            :ok
+        end
     end
 
     {:ok, container_id}

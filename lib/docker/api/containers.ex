@@ -18,8 +18,16 @@ defmodule Docker.Api.Containers do
     end
   end
 
-  def start(container_id) do
-    case Client.post("/containers/#{container_id}/start", %{}) do
+  def start(container_id, options \\ []) do
+    timeout_seconds = Keyword.get(options, :timeout_seconds, 300)
+    # enough to wait for container timeout
+    http_timeout = (timeout_seconds + 1) * 1000
+
+    case Client.post(
+           "/containers/#{container_id}/start",
+           %{},
+           opts: [adapter: [recv_timeout: http_timeout]]
+         ) do
       {:ok, %{status: 204}} -> :ok
       {:ok, %{status: status}} -> {:error, {:http_error, status}}
       {:error, message} -> {:error, message}
