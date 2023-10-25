@@ -45,6 +45,14 @@ defmodule Docker.Api.Containers do
     end
   end
 
+  def delete_stopped() do
+    case Client.post("/containers/prune", %{}) do
+      {:ok, %{status: 200}} -> :ok
+      {:ok, %{status: status}} -> {:error, {:http_error, status}}
+      {:error, message} -> {:error, message}
+    end
+  end
+
   def inspect(container_id) do
     case Client.get("/containers/#{container_id}/json") do
       {:ok, %{status: 200, body: body}} -> {:ok, ContainerState.parse_docker_response(body)}

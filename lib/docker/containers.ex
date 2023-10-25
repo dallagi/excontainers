@@ -28,6 +28,10 @@ defmodule Docker.Containers do
     Docker.Api.stop_container(container_id, options)
   end
 
+  def delete_stopped() do
+    Docker.Api.delete_stopped()
+  end
+
   def info(container_id), do: Docker.Api.inspect_container(container_id)
 
   def mapped_port(container, container_port) do

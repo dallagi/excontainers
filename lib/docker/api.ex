@@ -12,6 +12,8 @@ defmodule Docker.Api do
 
   defdelegate stop_container(container_id, options \\ []), to: Api.Containers, as: :stop
 
+  defdelegate delete_stopped(), to: Api.Containers, as: :delete_stopped
+
   defdelegate start_exec(exec_id), to: Api.Exec, as: :start
 
   defdelegate create_exec(container_id, command), to: Api.Exec, as: :create
