@@ -30,22 +30,29 @@ defmodule Docker.Containers do
 
   def info(container_id), do: Docker.Api.inspect_container(container_id)
 
-  def mapped_port(container, container_port) do
+  def mapped_port(container, container_port), do: mapped_port(container, container_port, 5)
+
+  def mapped_port(_container, _container_port, 0), do: {:error, :missing_port}
+
+  def mapped_port(container, container_port, retries) do
     container_port =
       container_port
       |> set_protocol_to_tcp_if_not_specified
 
-    case info(container) do
-      {:ok, info} ->
-        port =
-          info.mapped_ports
-          |> Map.get(container_port)
-          |> String.to_integer()
+    with {:ok, info} <- info(container) do
+      port =
+        info.mapped_ports
+        |> Map.get(container_port)
 
-        {:ok, port}
+      case port do
+        nil ->
+          # Port mappings are not configured immediately after the container is creating. If the
+          # mapping is missing, sleeping and retrying is usually sufficient.
+          :timer.sleep(10)
+          mapped_port(container, container_port, retries - 1)
 
-      {:error, message} ->
-        {:error, message}
+        port -> {:ok, String.to_integer(port)}
+      end
     end
   end
 

@@ -37,6 +37,8 @@ defmodule Docker.ContainerState do
 
   defp host_port(nil), do: nil
 
+  defp host_port([]), do: nil
+
   defp host_port(ports) do
     ports
     |> Enum.at(0)
