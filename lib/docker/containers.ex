@@ -51,7 +51,8 @@ defmodule Docker.Containers do
           :timer.sleep(10)
           mapped_port(container, container_port, retries - 1)
 
-        port -> {:ok, String.to_integer(port)}
+        port ->
+          {:ok, String.to_integer(port)}
       end
     end
   end

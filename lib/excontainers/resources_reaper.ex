@@ -62,7 +62,7 @@ defmodule Excontainers.ResourcesReaper do
     opts = [:binary, active: false, packet: :line]
     ryuk_port = Container.mapped_port(ryuk_pid, @ryuk_port)
 
-    :gen_tcp.connect('localhost', ryuk_port, opts)
+    :gen_tcp.connect(~c"localhost", ryuk_port, opts)
   end
 
   defp start_ryuk do
