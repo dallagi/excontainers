@@ -16,7 +16,7 @@ defmodule Excontainers.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       package: [
         links: %{"GitHub" => @source_url},
-        licenses: ["GPL-3.0-or-later"]
+        licenses: ["MIT"]
       ],
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
