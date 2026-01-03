@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.2] - 2026-01-03
+### Changed
+- Further relax version requirement for Tesla
+- Retry fetching mapped host port when a container is created
+- Trap exits in container, so that the `terminate/2` callback gets called
+
 ## [0.3.1] - 2021-02-23
 ### Changed
 - Relaxed version requirement for Tesla
