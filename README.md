@@ -12,13 +12,9 @@
 
 ## Project status
 
-**This package has not seen much real-world usage yet, hence it should not be considered as stable.**
-You are encouraged to give it a try and report back problems you may experience.
+This package is not maintained anymore.
 
-Excontainers was started as a personal study project to practice Elixir.
-The core functionalities are implemented and tested, and I plan to eventually evolve it beyond the scope of providing throwaway containers for tests.
-
-However the development is slow, as I'm currently focused on other matters.
+An official port of testcontainers for elixir (partially based on excontainers' code) is now available at [testcontainers/testcontainers-elixir](https://github.com/testcontainers/testcontainers-elixir).
 
 ## Installation
 
